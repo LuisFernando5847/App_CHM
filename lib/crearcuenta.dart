@@ -40,7 +40,12 @@ class _RegisterPageState extends State<RegisterPage> {
         correo.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Por favor, completa todos los campos requeridos'),
+          content: Text(
+            'Completa todos los campos requeridos',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.blue,
         ),
       );
       return;
@@ -51,7 +56,12 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!emailRegex.hasMatch(correo)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Por favor, ingresa un correo electrónico válido'),
+          content: Text(
+            'Ingresa un correo electrónico válido',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.orangeAccent,
         ),
       );
       return;
@@ -69,9 +79,9 @@ class _RegisterPageState extends State<RegisterPage> {
           content: Text(
             'No se permiten correos con dominios públicos o inválidos',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.amber,
+          backgroundColor: Colors.deepOrangeAccent,
         ),
       );
       return;
@@ -136,7 +146,14 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error al enviar código OTP')),
+        const SnackBar(
+          content: Text(
+          'Error al enviar código OTP',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.redAccent,
+        ),
       );
     }
   }
@@ -188,8 +205,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
-                      'Por favor, ingresa el código de verificación',
+                      'Ingresa el código de verificación que te ha sido enviado',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
                     ),
+                    backgroundColor: Colors.amberAccent,
                   ),
                 );
                 return;
@@ -210,7 +230,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Código incorrecto o expirado')),
+                  const SnackBar(
+                    content: Text(
+                      'Código incorrecto o expirado',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
                 );
               }
             },
@@ -255,13 +282,20 @@ class _RegisterPageState extends State<RegisterPage> {
         'Apellido_M': apellidoM,
         'Empresa': empresa,
         'Correo': correo,
-        //'EsAdmin': 3,
+        'NumeroCliente':numeroCliente,
       }),
     );
 
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuario registrado con éxito')),
+        const SnackBar(
+          content: Text(
+            'Usuario registrado con éxito',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color.fromARGB(255, 31, 170, 35),
+        ),
       );
       // Cierra el diálogo y regresa a la pantalla anterior
       Navigator.pop(context);
@@ -269,7 +303,13 @@ class _RegisterPageState extends State<RegisterPage> {
       final mensaje = jsonDecode(response.body)['mensaje'];
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(mensaje ?? 'Error al registrar')));
+      ).showSnackBar(SnackBar(content: Text(mensaje ?? 'Error al registrar',
+      textAlign: TextAlign.center,
+      style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+      ),
+      );
     }
   }
 
@@ -339,6 +379,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: correoController,
                       decoration: const InputDecoration(
                         labelText: 'Correo Electrónico',
+                      ),
+                    ),
+                    TextField(
+                      controller: numeroclienteController,
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: false
+                      ),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'0-9')),
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'No. Cliente (dejar vacio de no contar con uno)',
                       ),
                     ),
                     const SizedBox(height: 30),
