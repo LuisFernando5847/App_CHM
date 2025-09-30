@@ -68,9 +68,10 @@ class _RegisterPageState extends State<RegisterPage> {
         const SnackBar(
           content: Text(
             'No se permiten correos con dominios públicos o inválidos',
+            textAlign: TextAlign.center,
             style: TextStyle(color: Colors.black),
           ),
-          backgroundColor: Colors.amber
+          backgroundColor: Colors.amber,
         ),
       );
       return;
@@ -209,8 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Código incorrecto o expirado'),
-                  ),
+                  const SnackBar(content: Text('Código incorrecto o expirado')),
                 );
               }
             },
