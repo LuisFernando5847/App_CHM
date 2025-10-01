@@ -1,10 +1,21 @@
+import 'dart:convert';
 import 'package:chm_ios/main.dart';
-//import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class NuevoCliente extends StatefulWidget {
-  const NuevoCliente({super.key});
+  final String nombreCompleto;
+  final String correo;
+  final String empresa;
+
+  const NuevoCliente({
+    super.key,
+    required this.nombreCompleto,
+    required this.correo,
+    required this.empresa,
+  });
 
   @override
   State<NuevoCliente> createState() => _NuevoClienteState();
@@ -15,22 +26,67 @@ class _NuevoClienteState extends State<NuevoCliente> {
   final telefonoController = TextEditingController();
   final notasController = TextEditingController();
 
+  // METODOS PARA ENVIAR CORREOS ELECTRONICOS
+  Future<void> Solicitud_Nuevo_Cliente({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String numero,
+    required String notas,
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.136:5035/api/email/solicitud-nuevocliente',
+    );
+
+    final body = {
+      'toEmail': toEmail,
+      'nombreCompleto': nombreCompleto,
+      'empresa': empresa,
+      'numero': numero,
+      'notas': notas,
+    };
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${response.body}');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     //Mostrar Snackbar despues de la pantalla cargue
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Preciona el asistente para saber mas",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Preciona el asistente para saber mas",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 6),
           ),
-          backgroundColor: Colors.blue,
-          duration: Duration(seconds: 6),
-        ),
-      );
+        );
+      }
     });
   }
 
@@ -65,7 +121,9 @@ class _NuevoClienteState extends State<NuevoCliente> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text("Anota una breve descripción de lo que necesitas y uno de nuestros asesores te atenderá."),
+                Text(
+                  "Anota una breve descripción de lo que necesitas y uno de nuestros asesores te atenderá.",
+                ),
                 const SizedBox(height: 10),
                 //Campo Notas
                 TextField(
@@ -87,7 +145,7 @@ class _NuevoClienteState extends State<NuevoCliente> {
             ),
             TextButton(
               child: const Text("Enviar"),
-              onPressed: () {
+              onPressed: () async {
                 String telefono = telefonoController.text.trim();
                 String notas = notasController.text.trim();
 
@@ -121,21 +179,54 @@ class _NuevoClienteState extends State<NuevoCliente> {
                   return;
                 }
 
-                //Aqui se procesan los datos
-
+                // Cierra el dialogo
                 Navigator.of(context).pop();
 
+                // Mostrar indicador de progreso
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      "Telefono $telefono \nNotas $notas",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
+                  const SnackBar(
+                    content: Row(
+                      children: [
+                        CircularProgressIndicator(
+                          value: null,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 16),
+                        Text(
+                          "Enviando solicitud...",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
-                    duration: Duration(seconds: 3),
-                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 5),
+                    backgroundColor: Colors.blue,
                   ),
                 );
+
+                // Proceso de envio
+                try {
+                  await Solicitud_Nuevo_Cliente(
+                    toEmail: widget.correo,
+                    nombreCompleto: widget.nombreCompleto,
+                    empresa: widget.empresa,
+                    numero: telefono,
+                    notas: notas,
+                  );
+
+                  telefonoController.clear();
+                  notasController.clear();
+                  
+                } catch (e) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Error al enviar la solicitud: $e"),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 4),
+                    ),
+                  );
+                }
               },
             ),
           ],
@@ -197,12 +288,9 @@ class _NuevoClienteState extends State<NuevoCliente> {
         children: [
           // Imagen de fondo
           Positioned.fill(
-            child: Image.asset(
-              'assets/Fondo_Azul.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/Fondo_Azul.png', fit: BoxFit.cover),
           ),
-          
+
           // Contenido central
           Center(
             child: Column(
@@ -211,13 +299,10 @@ class _NuevoClienteState extends State<NuevoCliente> {
                 // Imagen central con gesture Detector
                 GestureDetector(
                   onTap: _mostrarDialogo,
-                  child: Image.asset(
-                    'assets/animacion6.gif',
-                    width: 210,
-                  ),
+                  child: Image.asset('assets/animacion6.gif', width: 210),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // Texto de bienvenida
                 const Text(
                   'Bienveido',

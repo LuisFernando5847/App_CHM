@@ -108,7 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     } else if (esAdmin == 2) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (_) => NuevoCliente()),
+                        MaterialPageRoute(
+                          builder: (_) => NuevoCliente(
+                            nombreCompleto:nombreCompleto,
+                            correo: correo,
+                            empresa: empresa,
+                          ),
+                        ),
                       );
                     } else if (esAdmin == 3) {
                       Navigator.pushReplacement(
