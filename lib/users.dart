@@ -42,7 +42,7 @@ class _UsersState extends State<Users> {
     Map<String, dynamic>? extras,
   }) async {
     final url = Uri.parse(
-      'http://1O.7.234.135:5035/api/email/solicitud-servicios',
+      'http://10.7.234.136:5035/api/email/solicitud-servicios',
     );
 
     final body = {
@@ -62,7 +62,17 @@ class _UsersState extends State<Users> {
     );
 
     if (response.statusCode == 200) {
-      print('Correo enviado correctamente');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
       throw Exception('Error al enviar el correo: ${response.body}');
     }
@@ -80,7 +90,7 @@ class _UsersState extends State<Users> {
     required String notas,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.135:5035/api/email/encuesta-satisfaccion', // endpoint dedicado
+      'http://10.7.234.136:5035/api/email/encuesta-satisfaccion', // endpoint dedicado
     );
 
     final body = {
@@ -117,7 +127,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.135:5035/api/email/solicitud-polipastos',
+      'http://10.7.234.136:5035/api/email/solicitud-polipastos',
     );
     final body = {
       'toEmail': toEmail,
@@ -147,7 +157,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario, // Campos dinámicos
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.135:5035/api/email/solicitud-accesorios',
+      'http://10.7.234.136:5035/api/email/solicitud-accesorios',
     );
 
     final body = {
@@ -179,7 +189,7 @@ class _UsersState extends State<Users> {
     required String capacidadH,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.135:5035/api/email/solicitud-patines',
+      'http://10.7.234.136:5035/api/email/solicitud-patines',
     );
     final respuesta = await http.post(
       url,
@@ -583,8 +593,6 @@ class _UsersState extends State<Users> {
                   datosFormulario[label] = valor ?? '';
                 });
 
-                print('Datos Recolectados: $datosFormulario');
-
                 // Mostrar indicador de progreso
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -933,7 +941,7 @@ class _UsersState extends State<Users> {
                               hora: hora,
                               extras: extras, // Campos dinámicos
                             );
-                            print('Correo enviado');
+
                           },
                           child: const Text("Enviar solicitud"),
                         ),
