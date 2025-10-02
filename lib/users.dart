@@ -24,9 +24,9 @@ class Users extends StatefulWidget {
 
 class _UsersState extends State<Users> {
   // VARIABLES PARA MOSTRAR PRODUCTOS
-  bool mostrarPolipastos = false;//
-  bool mostrarServicios = false;//
-  bool mostrarAccesorios = false;//
+  bool mostrarPolipastos = false; //
+  bool mostrarServicios = false; //
+  bool mostrarAccesorios = false; //
   bool mostrarPatines = false;
   bool mostrarCapacitaciones = false;
   bool mostrarProyectos = false;
@@ -112,9 +112,19 @@ class _UsersState extends State<Users> {
     );
 
     if (response.statusCode == 200) {
-      print("✅ Encuesta enviada correctamente");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
-      print("❌ Error al enviar la encuesta: ${response.body}");
+      
       throw Exception("Error al enviar encuesta: ${response.body}");
     }
   }
@@ -291,13 +301,7 @@ class _UsersState extends State<Users> {
         {
           'label': 'Capacidad de carga',
           'tipo': 'selector',
-          'opciones': [
-            '250 kg',
-            '500 kg',
-            '1000 kg',
-            '2000 kg',
-            '3000 kg',
-          ],
+          'opciones': ['250 kg', '500 kg', '1000 kg', '2000 kg', '3000 kg'],
         },
         {
           'label': 'Izaje (m)',
@@ -347,13 +351,7 @@ class _UsersState extends State<Users> {
         {
           'label': 'Capacidad de carga',
           'tipo': 'selector',
-          'opciones': [
-            '1000 kg',
-            '2000 kg',
-            '3000 kg',
-            '5000 kg',
-            '10000 kg',
-          ],
+          'opciones': ['1000 kg', '2000 kg', '3000 kg', '5000 kg', '10000 kg'],
         },
         {
           'label': 'Izaje (m)',
@@ -403,12 +401,7 @@ class _UsersState extends State<Users> {
         {
           'label': 'Capacidad de carga',
           'tipo': 'selector',
-          'opciones': [
-            '750 kg',
-            '1500 kg',
-            '3000 kg',
-            '6000 kg',
-          ],
+          'opciones': ['750 kg', '1500 kg', '3000 kg', '6000 kg'],
         },
         {
           'label': 'Izaje (m)',
@@ -941,7 +934,6 @@ class _UsersState extends State<Users> {
                               hora: hora,
                               extras: extras, // Campos dinámicos
                             );
-
                           },
                           child: const Text("Enviar solicitud"),
                         ),
@@ -1076,10 +1068,14 @@ class _UsersState extends State<Users> {
       'descripcion': 'Gancho de seguridad para polipastos y grúas.',
       'imagen': 'assets/GanchoSeguridad.jpeg',
       'campos': [
-        {'label': 'Tipo de polipasto', 'tipo': 'selector', 'opciones': ['De Cable', 'De Cadena']},
+        {
+          'label': 'Tipo de polipasto',
+          'tipo': 'selector',
+          'opciones': ['De Cable', 'De Cadena'],
+        },
         {'label': 'Marca', 'tipo': 'texto'},
         {'label': 'Número de Serie', 'tipo': 'texto'},
-        {'label': 'Capacidad', 'tipo': 'numero'}
+        {'label': 'Capacidad', 'tipo': 'numero'},
       ],
     },
     {
@@ -1090,7 +1086,11 @@ class _UsersState extends State<Users> {
       'imagen': 'assets/GRILLETE_DE_CARGA.webp',
       'campos': [
         {'label': 'Capacidad', 'tipo': 'numero'},
-        {'label': 'Tamaño', 'tipo': 'selector', 'opciones': ['1/2"', '5/8"', '3/4"', '1"']},
+        {
+          'label': 'Tamaño',
+          'tipo': 'selector',
+          'opciones': ['1/2"', '5/8"', '3/4"', '1"'],
+        },
       ],
     },
     {
@@ -1100,11 +1100,19 @@ class _UsersState extends State<Users> {
       'descripcion': 'Estrobo para levantamiento de cargas pesadas.',
       'imagen': 'assets/ESTROBO_DE_CARGA.jpg',
       'campos': [
-        {'label': 'Tipo', 'tipo': 'selector', 'opciones': ['Cable de acero', 'Cadena', 'Poliester']},
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Cable de acero', 'Cadena', 'Poliester'],
+        },
         {'label': 'Longitud', 'tipo': 'numero'},
-        {'label': 'Número de ramales', 'tipo': 'selector', 'opciones': ['1', '2', '3', '4']},
+        {
+          'label': 'Número de ramales',
+          'tipo': 'selector',
+          'opciones': ['1', '2', '3', '4'],
+        },
         {'label': 'Capacidad de carga', 'tipo': 'numero'},
-        {'label': 'Acessorios', 'tipo': 'texto',},
+        {'label': 'Acessorios', 'tipo': 'texto'},
       ],
     },
     {
@@ -1126,10 +1134,18 @@ class _UsersState extends State<Users> {
       'descripcion': 'Tirfor para tracción manual de cargas.',
       'imagen': 'assets/TIRFOR.webp',
       'campos': [
-        {'label': 'Tipo', 'tipo': 'selector', 'opciones': ['Acero', 'Aluminio']},
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Acero', 'Aluminio'],
+        },
         {'label': 'Modelo', 'tipo': 'texto'},
         {'label': 'Capacidad de carga', 'tipo': 'numero'},
-        {'label': 'Cable incluido', 'tipo': 'selector', 'opciones': ['Sí', 'No']},
+        {
+          'label': 'Cable incluido',
+          'tipo': 'selector',
+          'opciones': ['Sí', 'No'],
+        },
         {'label': 'Longitud', 'tipo': 'numero'},
         {'label': 'Accesorios de cable', 'tipo': 'texto'},
       ],
@@ -1154,7 +1170,11 @@ class _UsersState extends State<Users> {
       'descripcion': 'Cadena resistente para elevación de objetos pesados.',
       'imagen': 'assets/CADENAS_DE_ELEVACION.avif',
       'campos': [
-        {'label': 'Capacidad de carga', 'tipo': 'selector', 'opciones': ['Grado 80', 'Grado 100']},
+        {
+          'label': 'Capacidad de carga',
+          'tipo': 'selector',
+          'opciones': ['Grado 80', 'Grado 100'],
+        },
         {'label': 'Longitud (m)', 'tipo': 'numero'},
         {'label': 'Medida de la cadena', 'tipo': 'numero'},
       ],
@@ -1194,7 +1214,11 @@ class _UsersState extends State<Users> {
       'descripcion': 'Tensor para ajuste de cables o estrobos.',
       'imagen': 'assets/TENSOR.webp',
       'campos': [
-        {'label': 'Tipo', 'tipo': 'selector', 'opciones': ['Gancho-Gancho', 'Ojo-Ojo', 'Gancho-Ojo']},
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Gancho-Gancho', 'Ojo-Ojo', 'Gancho-Ojo'],
+        },
         {'label': 'Capacidad', 'tipo': 'numero'},
         {'label': 'Longitud', 'tipo': 'numero'},
       ],
@@ -1206,7 +1230,11 @@ class _UsersState extends State<Users> {
       'descripcion': 'Trole y trole para vigas curvas',
       'imagen': 'assets/TROLE.webp',
       'campos': [
-        {'label': 'Tipo', 'tipo': 'selector', 'opciones': ['Manual', 'Neumático', 'Eléctrico']},
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Manual', 'Neumático', 'Eléctrico'],
+        },
         {'label': 'Capacidad de carga', 'tipo': 'numero'},
         {'label': 'Dimensiones de la viga', 'tipo': 'texto'},
         {'label': 'Nota', 'tipo': 'texto'},
@@ -1229,8 +1257,16 @@ class _UsersState extends State<Users> {
       'descripcion': 'Topes para limitar el recorrido en rieles de polipasto',
       'imagen': 'assets/GUIAS_DE_CABLE.webp',
       'campos': [
-        {'label': 'Tipo', 'tipo': 'selector', 'opciones': ['Acero', 'Goma', 'Eléctrico']},
-        {'label': 'Lugar de montaje', 'tipo': 'selector', 'opciones': ['Cabezal', 'Rieles de la grua']}, 
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Acero', 'Goma', 'Eléctrico'],
+        },
+        {
+          'label': 'Lugar de montaje',
+          'tipo': 'selector',
+          'opciones': ['Cabezal', 'Rieles de la grua'],
+        },
       ],
     },
     {
@@ -1243,8 +1279,16 @@ class _UsersState extends State<Users> {
         {'label': 'Marca', 'tipo': 'texto'},
         {'label': 'Modelo', 'tipo': 'texto'},
         {'label': 'Capacidad máxima', 'tipo': 'numero'},
-        {'label': 'Instalacion', 'tipo': 'selector', 'opciones': ['Con instalación', 'Sin instalación']},
-        {'label': 'Voltaje de conexión', 'tipo': 'selector', 'opciones': ['24 V','48 V','110 V','220 V','440 V']},
+        {
+          'label': 'Instalacion',
+          'tipo': 'selector',
+          'opciones': ['Con instalación', 'Sin instalación'],
+        },
+        {
+          'label': 'Voltaje de conexión',
+          'tipo': 'selector',
+          'opciones': ['24 V', '48 V', '110 V', '220 V', '440 V'],
+        },
       ],
     },
     {
@@ -1254,7 +1298,11 @@ class _UsersState extends State<Users> {
       'descripcion': 'Cables para alimentación de polipastos.',
       'imagen': 'assets/CABLE_ALIMENTACION.webp',
       'campos': [
-        {'label': 'Tipo', 'tipo': 'selector', 'opciones': ['Plano', 'Redondo']},
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Plano', 'Redondo'],
+        },
         {'label': 'Calibre', 'tipo': 'texto'},
         {'label': 'Numero de hilos', 'tipo': 'numero'},
         {'label': 'Metros', 'tipo': 'numero'},
@@ -1814,13 +1862,11 @@ class _UsersState extends State<Users> {
 
                             TextField(
                               controller: contactoController,
-                              keyboardType: TextInputType.numberWithOptions(
-                                decimal: true,
-                              ),
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9/]'),
-                                ),
+                              keyboardType: TextInputType.number,
+                              maxLength: 10,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
                               ],
                               decoration: const InputDecoration(
                                 labelText: 'Contacto',
@@ -1947,30 +1993,49 @@ class _UsersState extends State<Users> {
                                     backgroundColor: Colors.red,
                                   ),
                                 );
-                              } else {
-                                Navigator.of(context).pop();
-
-                                // Mostrar indicador
+                                return;
+                              }
+                              if (contac.length <10){
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Row(
-                                      children: [
-                                        CircularProgressIndicator(
-                                          value: null,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(width: 16),
-                                        Text(
-                                          "Porque tu opinion es importante...",
-                                        ),
-                                      ],
+                                    content: Text(
+                                      'El número debe de tener 10 digitos',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                     duration: Duration(seconds: 3),
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.deepOrangeAccent,
                                   ),
                                 );
-                                
-                                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                return;
+                              }
+
+                              // Cierra el dialogo
+                              Navigator.of(context).pop();
+
+                              // Mostrar indicador de progreso
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Row(
+                                    children: [
+                                      CircularProgressIndicator(
+                                        value: null,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text(
+                                        "Enviando solicitud...",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                  backgroundColor: Colors.blue,
+                                ),
+                              );
+
+                              try{
                                 // Enviar al backend
                                 await enviarEncuestaSatisfaccion(
                                   toEmail: widget.correo,
@@ -1979,17 +2044,22 @@ class _UsersState extends State<Users> {
                                   contacto: contac,
                                   fecha: fech,
                                   puesto: puest,
-                                  calificacion: califi, 
+                                  calificacion: califi,
                                   conformidad: confor,
                                   notas: nots,
                                 );
-                                
+
+                              }catch(e){
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                      "Gracias por confiar en nosotros",
-                                    ),
-                                    backgroundColor: Colors.green,
+                                      "Error al enviar la solicitud: $e",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                      ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 4),
                                   ),
                                 );
                               }
