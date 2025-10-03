@@ -182,6 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,// NO SE MUEVE NADA SE QUEDA FIJO CUANDO ENTRA EL TECLADO
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -204,137 +205,139 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Column(
-              children: [
-                const SizedBox(height: 90),
-                const Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text(
-                    'Bienvenido',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 37,
-                      fontWeight: FontWeight.bold,
+            SingleChildScrollView(//EVITA LINEA AMARILLA
+              child: Column(
+                children: [
+                  const SizedBox(height: 90),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text(
+                      'Bienvenido',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 37,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Image.asset('assets/animacion6.gif', width: 200, height: 200),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 20,
-                  ),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(255, 255, 255, 0.7),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Ingrese sus datos',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(height: 10),
+                  Image.asset('assets/animacion6.gif', width: 200, height: 200),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(255, 255, 255, 0.7),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _userController,
-                        decoration: InputDecoration(
-                          labelText: 'Usuario',
-                          labelStyle: const TextStyle(color: Colors.black87),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _passController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Contraseña',
-                          labelStyle: const TextStyle(color: Colors.black87),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF192557),
-                          foregroundColor: Colors.white.withOpacity(0.9),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 15,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          shadowColor: Colors.black,
-                          elevation: 10,
-                        ),
-                        onPressed: _login,
-                        child: const Text(
-                          'Iniciar sesión',
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Ingrese sus datos',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(
-                            255,
-                            245,
-                            156,
-                            22,
-                          ),
-                          foregroundColor: Colors.white.withOpacity(0.9),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 15,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          shadowColor: Colors.black,
-                          elevation: 10,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const RegisterPage(),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: _userController,
+                          decoration: InputDecoration(
+                            labelText: 'Usuario',
+                            labelStyle: const TextStyle(color: Colors.black87),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          );
-                        },
-                        child: const Text(
-                          'Crear una cuenta',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: _passController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Contraseña',
+                            labelStyle: const TextStyle(color: Colors.black87),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF192557),
+                            foregroundColor: Colors.white.withOpacity(0.9),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            shadowColor: Colors.black,
+                            elevation: 10,
+                          ),
+                          onPressed: _login,
+                          child: const Text(
+                            'Iniciar sesión',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              245,
+                              156,
+                              22,
+                            ),
+                            foregroundColor: Colors.white.withOpacity(0.9),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            shadowColor: Colors.black,
+                            elevation: 10,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const RegisterPage(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Crear una cuenta',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

@@ -124,7 +124,6 @@ class _UsersState extends State<Users> {
         ),
       );
     } else {
-      
       throw Exception("Error al enviar encuesta: ${response.body}");
     }
   }
@@ -1593,208 +1592,400 @@ class _UsersState extends State<Users> {
   }
 
   // METODOS PARA PATINES
-  Future<List<Map<String, dynamic>>> _cargarPatines() async {
-    final response = await http.get(
-      Uri.parse("http://10.7.234.136:5035/api/productos/obtener-productos"),
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      final polipastos = data.where((producto) {
-        final nombre = producto['nombre']?.toString().toLowerCase() ?? '';
-        return nombre.contains("patin") || nombre.contains("patines");
-      }).toList();
+  final List<Map<String, dynamic>> _cargarPatines = [
+    {
+      "id": "1",
+      "nombre": "Patín Hidráulico Crown",
+      "categoria": "Equipos de Carga",
+      "descripcion": "Patín hidráulico de la marca Crown",
+      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "campos": [
+        {"label": "Modelo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (kg)",
+          "tipo": "selector",
+          "opciones": [1000, 1500, 2000, 2500, 3000, 5000]
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Longitud de horquillas (mm)", "tipo": "numero"},
+        {"label": "Ancho total (mm)", "tipo": "numero"},
+        {
+          "label": "Material de ruedas",
+          "tipo": "selector",
+          "opciones": ["Nylon", "Poliuretano", "Goma"]
+        },
+        {
+          "label": "Tipo de ruedas",
+          "tipo": "selector",
+          "opciones": ["Simples", "Dobles", "Articuladas"]
+        },
+        {"label": "Peso del equipo (kg)", "tipo": "numero"},
+        {"label": "Garantía (años)", "tipo": "numero"},
+        {"label": "Comentarios / extras", "tipo": "texto"},
+      ],
+    },
+    {
+      "id": "2",
+      "nombre": "Patín Hidráulico Toyota",
+      "categoria": "Equipos de Carga",
+      "descripcion": "Patín hidráulico de la marca Toyota",
+      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "campos": [
+        {"label": "Modelo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (lb)",
+          "tipo": "selector",
+          "opciones": [3000, 4500, 6000, 8000]
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Longitud de horquillas (in)", "tipo": "numero"},
+        {"label": "Ancho total (in)", "tipo": "numero"},
+        {
+          "label": "Material de ruedas",
+          "tipo": "selector",
+          "opciones": ["Nylon", "Poliuretano"]
+        },
+        {"label": "Peso del equipo (kg)", "tipo": "numero"},
+        {"label": "Voltaje / sistema eléctrico", "tipo": "texto"},
+        {"label": "Garantía", "tipo": "texto"},
+      ],
+    },
+    {
+      "id": "3",
+      "nombre": "Patín Hidráulico Yale",
+      "categoria": "Equipos de Carga",
+      "descripcion": "Patín hidráulico de la marca Yale",
+      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "campos": [
+        {"label": "Modelo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (lb)",
+          "tipo": "selector",
+          "opciones": [2500, 3500, 5500]
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Longitud de horquillas (mm)", "tipo": "numero"},
+        {"label": "Ancho total (mm)", "tipo": "numero"},
+        {
+          "label": "Material de ruedas",
+          "tipo": "selector",
+          "opciones": ["Poliuretano", "Nylon"]
+        },
+        {"label": "Peso del equipo (kg)", "tipo": "numero"},
+        {"label": "Opciones especiales", "tipo": "texto"},
+      ],
+    },
+    {
+      "id": "4",
+      "nombre": "Patín Hidráulico Noblelift",
+      "categoria": "Equipos de Carga",
+      "descripcion": "Patín hidráulico de la marca Noblelift",
+      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "campos": [
+        {"label": "Modelo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (lb)",
+          "tipo": "selector",
+          "opciones": [3000, 4500, 5500]
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Longitud de horquillas (in)", "tipo": "numero"},
+        {"label": "Ancho total (in)", "tipo": "numero"},
+        {
+          "label": "Material de ruedas",
+          "tipo": "selector",
+          "opciones": ["Poliuretano", "Nylon"]
+        },
+        {"label": "Peso del equipo (kg)", "tipo": "numero"},
+        {"label": "Garantía", "tipo": "texto"},
+      ],
+    },
+  ];
 
-      return polipastos.map((producto) {
-        return {
-          'id': producto['id']?.toString() ?? '',
-          'nombre': producto['nombre']?.toString() ?? '',
-          'categoria': producto['categoria']?.toString() ?? '',
-          'descripcion': producto['descripcion']?.toString() ?? '',
-        };
-      }).toList();
-    } else {
-      throw Exception("Error al cargar productos");
+  void _mostrarFormularioPatines(
+    BuildContext context,
+    Map<String, dynamic> accesorio,
+  ) {
+    final campos = accesorio['campos'] as List<dynamic>;
+    final scaffoldContext = context;
+
+    // Controladores para los campos de texto y seleccionados
+    final Map<String, TextEditingController> txtControllers = {};
+    final Map<String, String?> selecValuesController = {};
+
+    for (var campo in campos) {
+      if (campo['tipo'] == 'selector') {
+        selecValuesController[campo['label']] = null;
+      } else {
+        txtControllers[campo['label']] = TextEditingController();
+      }
     }
-  }
 
-  Widget _vistaPatines() {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: _cargarPatines(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text("Error: ${snapshot.error}"));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("No hay Patines disponibles"));
-        }
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Text("Accesorio: ${accesorio['nombre']}"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Categoría: ${accesorio['categoria']}"),
+                const SizedBox(height: 8),
+                Text("Descripción: ${accesorio['descripcion']}"),
+                const SizedBox(height: 16),
 
-        final productos = snapshot.data!;
-        return GridView.count(
-          crossAxisCount: 2,
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 80),
-          childAspectRatio: 0.70,
-          children: productos.map((producto) {
-            final id = producto['id']!;
-            final nombre = producto['nombre']!;
-            final categoria = producto['categoria']!;
-            final descripcion = producto['descripcion']!;
-            final imagenUrl =
-                "http://10.7.234.136:5035/api/productos/imagen/$id";
-
-            return GestureDetector(
-              onTap: () {
-                final capacidadController = TextEditingController();
-                final marcaController = TextEditingController();
-                // Mostrar el diálogo
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return AlertDialog(
-                          scrollable: true,
-                          title: Text(
-                            "Solicitud para: $nombre \n $categoria",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextField(
-                                controller: capacidadController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  labelText: 'Capacidad deseada (kg)',
-                                  border: OutlineInputBorder(),
+                // Generar campos dinámicamente
+                for (var campo in campos)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: campo['tipo'] == 'selector'
+                        ? DropdownButtonFormField<String>(
+                            value: selecValuesController[campo['label']],
+                            items: (campo['opciones'] as List<String>)
+                                .map(
+                                  (opcion) => DropdownMenuItem(
+                                    value: opcion,
+                                    child: Text(opcion),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              selecValuesController[campo['label']] = value;
+                            },
+                            decoration: InputDecoration(
+                              labelText: campo['label'],
+                              border: OutlineInputBorder(),
+                            ),
+                          )
+                        : TextField(
+                            controller: txtControllers[campo['label']],
+                            keyboardType: campo['tipo'] == 'numero'
+                                ? TextInputType.number
+                                : (campo['multilinea'] == true
+                                      ? TextInputType.multiline
+                                      : TextInputType.text),
+                            //: TextInputType.text,
+                            maxLines: campo['multilinea'] == true ? null : 1,
+                            inputFormatters: [
+                              if (campo['tipo'] == 'numero') ...[
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]'),
                                 ),
-                              ),
-                              const SizedBox(height: 12),
-                              TextField(
-                                controller: marcaController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  labelText: 'Alguna Marca',
-                                  border: OutlineInputBorder(),
+                                if (campo['label'].toLowerCase() == 'cantidad')
+                                  LengthLimitingTextInputFormatter(4),
+                              ],
+                              if (campo['tipo'] == 'texto' &&
+                                  campo['multilinea'] != true) ...[
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]'),
                                 ),
-                              ),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              if (campo['multilinea'] == true) ...[
+                                LengthLimitingTextInputFormatter(
+                                  campo['maxCaracteres'] ?? 100,
+                                ),
+                              ],
+                              if (campo['label'].toLowerCase().contains(
+                                    'Modelo',
+                                  ) ||
+                                  campo['label'].toLowerCase().contains(
+                                    'Número de Serie',
+                                  )) ...[
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]'),
+                                ),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                             ],
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text("Cancelar"),
+                            decoration: InputDecoration(
+                              labelText: campo['label'],
+                              border: const OutlineInputBorder(),
                             ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                final capacidadH = capacidadController.text
-                                    .trim();
-                                final marcaH = marcaController.text.trim();
+                          ),
+                  ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                bool camposCompletos = true;
 
-                                if (capacidadH.isEmpty || marcaH.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Por favor completa todos los campos',
-                                      ),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        "Solicitud enviada:\n$nombre\nDía: $capacidadH\nHora: $marcaH",
-                                      ),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                  // Aquí puedes enviar los datos al backend
-                                  await enviarCorreoPatinHidraulico(
-                                    toEmail: widget.correo,
-                                    nombreCompleto: widget.nombreCompleto,
-                                    empresa: widget.empresa,
-                                    capacidadH: capacidadH,
-                                    marcaH: marcaH,
-                                  );
-                                }
-                              },
-                              child: const Text("Enviar solicitud"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                txtControllers.forEach((label, controller) {
+                  if (controller.text.trim().isEmpty) {
+                    camposCompletos = false;
+                  }
+                });
+                selecValuesController.forEach((label, valor) {
+                  if (valor == null || valor.trim().isEmpty) {
+                    camposCompletos = false;
+                  }
+                });
+
+                if (!camposCompletos) {
+                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                    const SnackBar(
+                      content: Text("Por favor completa todos los campos."),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return; // No cerrar y no enviar
+                }
+
+                Navigator.of(context).pop();
+                // Recolectamos los Datos del formulario
+                Map<String, String> datosFormulario = {};
+                txtControllers.forEach((label, controller) {
+                  datosFormulario[label] = controller.text;
+                });
+                selecValuesController.forEach((label, valor) {
+                  datosFormulario[label] = valor ?? '';
+                });
+
+                print('Datos Recolectados: $datosFormulario');
+
+                // Mostrar indicador de progreso
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Row(
+                      children: [
+                        CircularProgressIndicator(
+                          value: null,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 16),
+                        Text("Enviando solicitud..."),
+                      ],
+                    ),
+                    duration: Duration(seconds: 5),
+                    backgroundColor: Colors.blue,
+                  ),
                 );
+
+                // Enviar correo con los datos
+                try {
+                  await enviarCorreoAccesorio(
+                    toEmail: widget.correo,
+                    nombreCompleto: widget.nombreCompleto,
+                    empresa: widget.empresa,
+                    nombreAccesorio: accesorio['nombre'],
+                    datosFormulario: datosFormulario,
+                  );
+
+                  // Usar el contexto del widget padre (evitar contextos cerrados)
+                  //if (!mounted) return;
+                  ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                    const SnackBar(
+                      content: Text("Solicitud enviada correctamente"),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                } catch (e) {
+                  // if(!mounted) return; // chequeo de seguridad
+                  ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                    SnackBar(
+                      content: Text("Error al enviar la solicitud: $e"),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
               },
-              child: Card(
-                elevation: 5,
-                margin: const EdgeInsets.all(8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        child: Image.network(
-                          imagenUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                                child: Icon(
-                                  Icons.broken_image,
-                                  size: 80,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            nombre,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Categoría: $categoria",
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          Text(
-                            "Descripción: $descripcion",
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+              child: const Text("Aceptar"),
+            ),
+          ],
         );
       },
+    );
+  }
+
+ 
+
+  Widget _vistaPatines() {
+    if (_cargarPatines.isEmpty) {
+      return const Center(child: Text('No hay accesorios disponibles'));
+    }
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 80), // espacio para el FAB
+      childAspectRatio: 0.70,
+      children: _cargarPatines.map((producto) {
+        final nombre = producto['nombre']!;
+        final categoria = producto['categoria']!;
+        final descripcion = producto['descripcion']!;
+        final imagenlocal = producto['imagen']!;
+
+        return GestureDetector(
+          onTap: () => _mostrarFormularioPatines(context, producto),
+          child: Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child: Image.asset(imagenlocal, fit: BoxFit.cover),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        nombre,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        "Categoría: $categoria",
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        "Descripción: $descripcion",
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -1995,7 +2186,7 @@ class _UsersState extends State<Users> {
                                 );
                                 return;
                               }
-                              if (contac.length <10){
+                              if (contac.length < 10) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
@@ -2035,7 +2226,7 @@ class _UsersState extends State<Users> {
                                 ),
                               );
 
-                              try{
+                              try {
                                 // Enviar al backend
                                 await enviarEncuestaSatisfaccion(
                                   toEmail: widget.correo,
@@ -2048,16 +2239,17 @@ class _UsersState extends State<Users> {
                                   conformidad: confor,
                                   notas: nots,
                                 );
-
-                              }catch(e){
-                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              } catch (e) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).hideCurrentSnackBar();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
                                       "Error al enviar la solicitud: $e",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.white),
-                                      ),
+                                    ),
                                     backgroundColor: Colors.red,
                                     duration: Duration(seconds: 4),
                                   ),
