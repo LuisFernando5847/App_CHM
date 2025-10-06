@@ -24,9 +24,9 @@ class Users extends StatefulWidget {
 
 class _UsersState extends State<Users> {
   // VARIABLES PARA MOSTRAR PRODUCTOS
-  bool mostrarPolipastos = false; //
-  bool mostrarServicios = false; //
-  bool mostrarAccesorios = false; //
+  bool mostrarPolipastos = false;
+  bool mostrarServicios = false;
+  bool mostrarAccesorios = false;
   bool mostrarPatines = false;
   bool mostrarCapacitaciones = false;
   bool mostrarProyectos = false;
@@ -42,7 +42,7 @@ class _UsersState extends State<Users> {
     Map<String, dynamic>? extras,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5035/api/email/solicitud-servicios',
+      'http://10.7.234.136:5090/api/email/solicitud-servicios',
     );
 
     final body = {
@@ -90,7 +90,7 @@ class _UsersState extends State<Users> {
     required String notas,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5035/api/email/encuesta-satisfaccion', // endpoint dedicado
+      'http://10.7.234.136:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
     );
 
     final body = {
@@ -115,7 +115,7 @@ class _UsersState extends State<Users> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            "Tu solicitud ha sido enviada correctamente",
+            "Agradecemos por tu tiempo",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
@@ -136,7 +136,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5035/api/email/solicitud-polipastos',
+      'http://10.7.234.136:5090/api/email/solicitud-polipastos',
     );
     final body = {
       'toEmail': toEmail,
@@ -152,12 +152,22 @@ class _UsersState extends State<Users> {
       body: jsonEncode(body),
     );
     if (respuesta.statusCode == 200) {
-      print('Correo enviado correctamente con los datos: $body');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
       throw Exception('Error al enviar el correo: ${respuesta.body}');
     }
   }
-
+//
   Future<void> enviarCorreoAccesorio({
     required String toEmail,
     required String nombreCompleto,
@@ -166,7 +176,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario, // Campos dinámicos
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5035/api/email/solicitud-accesorios',
+      'http://10.7.234.136:5090/api/email/solicitud-accesorios',
     );
 
     final body = {
@@ -184,7 +194,18 @@ class _UsersState extends State<Users> {
     );
 
     if (respuesta.statusCode == 200) {
-      print('Correo enviado correctamente con los datos: $body');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Solicitud enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
       throw Exception('Error al enviar el correo: ${respuesta.body}');
     }
@@ -212,7 +233,17 @@ class _UsersState extends State<Users> {
       }),
     );
     if (respuesta.statusCode == 200) {
-      print('Correo enviado correctamente');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
       throw Exception('Error al enviar el correo: ${respuesta.body}');
     }
@@ -613,16 +644,6 @@ class _UsersState extends State<Users> {
                     datosFormulario: datosFormulario,
                   );
 
-                  // Usar el contexto del widget padre (evitar contextos cerrados)
-                  //if (!mounted) return;
-                  ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                    const SnackBar(
-                      content: Text("Solicitud enviada correctamente"),
-                      backgroundColor: Colors.green,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
                 } catch (e) {
                   // if(!mounted) return; // chequeo de seguridad
                   ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
@@ -1491,14 +1512,8 @@ class _UsersState extends State<Users> {
 
                   // Usar el contexto del widget padre (evitar contextos cerrados)
                   //if (!mounted) return;
-                  ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                    const SnackBar(
-                      content: Text("Solicitud enviada correctamente"),
-                      backgroundColor: Colors.green,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                  //ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
+                  
                 } catch (e) {
                   // if(!mounted) return; // chequeo de seguridad
                   ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
@@ -1598,13 +1613,13 @@ class _UsersState extends State<Users> {
       "nombre": "Patín Hidráulico Crown",
       "categoria": "Equipos de Carga",
       "descripcion": "Patín hidráulico de la marca Crown",
-      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "imagen": "assets/PATIN_CROWN.jpeg",
       "campos": [
         {"label": "Modelo", "tipo": "texto"},
         {
           "label": "Capacidad de carga (kg)",
           "tipo": "selector",
-          "opciones": [1000, 1500, 2000, 2500, 3000, 5000]
+          "opciones": [1000, 1500, 2000, 2500, 3000, 5000],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1613,12 +1628,12 @@ class _UsersState extends State<Users> {
         {
           "label": "Material de ruedas",
           "tipo": "selector",
-          "opciones": ["Nylon", "Poliuretano", "Goma"]
+          "opciones": ["Nylon", "Poliuretano", "Goma"],
         },
         {
           "label": "Tipo de ruedas",
           "tipo": "selector",
-          "opciones": ["Simples", "Dobles", "Articuladas"]
+          "opciones": ["Simples", "Dobles", "Articuladas"],
         },
         {"label": "Peso del equipo (kg)", "tipo": "numero"},
         {"label": "Garantía (años)", "tipo": "numero"},
@@ -1630,13 +1645,13 @@ class _UsersState extends State<Users> {
       "nombre": "Patín Hidráulico Toyota",
       "categoria": "Equipos de Carga",
       "descripcion": "Patín hidráulico de la marca Toyota",
-      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "imagen": "assets/PATIN_TOYOTA.png",
       "campos": [
         {"label": "Modelo", "tipo": "texto"},
         {
           "label": "Capacidad de carga (lb)",
           "tipo": "selector",
-          "opciones": [3000, 4500, 6000, 8000]
+          "opciones": [3000, 4500, 6000, 8000],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1645,7 +1660,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Material de ruedas",
           "tipo": "selector",
-          "opciones": ["Nylon", "Poliuretano"]
+          "opciones": ["Nylon", "Poliuretano"],
         },
         {"label": "Peso del equipo (kg)", "tipo": "numero"},
         {"label": "Voltaje / sistema eléctrico", "tipo": "texto"},
@@ -1657,13 +1672,13 @@ class _UsersState extends State<Users> {
       "nombre": "Patín Hidráulico Yale",
       "categoria": "Equipos de Carga",
       "descripcion": "Patín hidráulico de la marca Yale",
-      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "imagen": "assets/PATIN_YALE.jpeg",
       "campos": [
         {"label": "Modelo", "tipo": "texto"},
         {
           "label": "Capacidad de carga (lb)",
           "tipo": "selector",
-          "opciones": [2500, 3500, 5500]
+          "opciones": [2500, 3500, 5500],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1672,7 +1687,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Material de ruedas",
           "tipo": "selector",
-          "opciones": ["Poliuretano", "Nylon"]
+          "opciones": ["Poliuretano", "Nylon"],
         },
         {"label": "Peso del equipo (kg)", "tipo": "numero"},
         {"label": "Opciones especiales", "tipo": "texto"},
@@ -1683,13 +1698,13 @@ class _UsersState extends State<Users> {
       "nombre": "Patín Hidráulico Noblelift",
       "categoria": "Equipos de Carga",
       "descripcion": "Patín hidráulico de la marca Noblelift",
-      "imagen": "assets/CABLE_ALIMENTACION.webp",
+      "imagen": "assets/PATIN_NOBLELIFT.jpeg",
       "campos": [
         {"label": "Modelo", "tipo": "texto"},
         {
           "label": "Capacidad de carga (lb)",
           "tipo": "selector",
-          "opciones": [3000, 4500, 5500]
+          "opciones": [3000, 4500, 5500],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1698,7 +1713,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Material de ruedas",
           "tipo": "selector",
-          "opciones": ["Poliuretano", "Nylon"]
+          "opciones": ["Poliuretano", "Nylon"],
         },
         {"label": "Peso del equipo (kg)", "tipo": "numero"},
         {"label": "Garantía", "tipo": "texto"},
@@ -1855,8 +1870,6 @@ class _UsersState extends State<Users> {
                   datosFormulario[label] = valor ?? '';
                 });
 
-                print('Datos Recolectados: $datosFormulario');
-
                 // Mostrar indicador de progreso
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -1884,17 +1897,6 @@ class _UsersState extends State<Users> {
                     nombreAccesorio: accesorio['nombre'],
                     datosFormulario: datosFormulario,
                   );
-
-                  // Usar el contexto del widget padre (evitar contextos cerrados)
-                  //if (!mounted) return;
-                  ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                    const SnackBar(
-                      content: Text("Solicitud enviada correctamente"),
-                      backgroundColor: Colors.green,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
                 } catch (e) {
                   // if(!mounted) return; // chequeo de seguridad
                   ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
@@ -1914,8 +1916,6 @@ class _UsersState extends State<Users> {
       },
     );
   }
-
- 
 
   Widget _vistaPatines() {
     if (_cargarPatines.isEmpty) {
@@ -1968,6 +1968,573 @@ class _UsersState extends State<Users> {
                       Text(
                         "Categoría: $categoria",
                         style: const TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        "Descripción: $descripcion",
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  // METODOS PARA CAPACITACIONES
+
+  final List<Map<String, dynamic>> _cargarCapacitaciones = [
+    {
+      "id": "1",
+      "nombre": "Manejo de Polipastos",
+      "categoria": "Equipos de Carga",
+      "descripcion": "Capacitación práctica sobre manejo seguro de polipastos.",
+      "imagen": "assets/CURSO_POLIPASTO.png",
+      "campos": [
+        {"label": "Modelo del equipo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (kg)",
+          "tipo": "selector",
+          "opciones": [1000, 1500, 2000, 2500, 3000, 5000],
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {
+          "label": "Material de ruedas",
+          "tipo": "selector",
+          "opciones": ["Nylon", "Poliuretano", "Goma"],
+        },
+        {
+          "label": "Tipo de ruedas",
+          "tipo": "selector",
+          "opciones": ["Simples", "Dobles", "Articuladas"],
+        },
+        {"label": "Número de participantes", "tipo": "numero"},
+        {"label": "Duración (hrs)", "tipo": "numero"},
+        {"label": "Lugar de capacitación", "tipo": "texto"},
+        {
+          "label": "Nivel requerido",
+          "tipo": "selector",
+          "opciones": ["Básico", "Intermedio", "Avanzado"],
+        },
+        {"label": "Instructor", "tipo": "texto"},
+        {"label": "Comentarios / observaciones", "tipo": "texto"},
+      ],
+    },
+    {
+      "id": "2",
+      "nombre": "Soldaduras",
+      "categoria": "Equipos de Carga",
+      "descripcion":
+          "Capacitación sobre técnicas de soldadura y seguridad al trabajar con equipos de carga.",
+      "imagen": "assets/CURSO_POLIPASTO.png",
+      "campos": [
+        {
+          "label": "Tipo de soldadura",
+          "tipo": "selector",
+          "opciones": ["MIG", "TIG", "Electrodo"],
+        },
+        {"label": "Modelo del equipo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (kg)",
+          "tipo": "selector",
+          "opciones": [1000, 1500, 2000, 2500, 3000, 5000],
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Número de participantes", "tipo": "numero"},
+        {"label": "Duración (hrs)", "tipo": "numero"},
+        {"label": "Lugar de capacitación", "tipo": "texto"},
+        {
+          "label": "Nivel requerido",
+          "tipo": "selector",
+          "opciones": ["Básico", "Intermedio", "Avanzado"],
+        },
+        {"label": "Instructor", "tipo": "texto"},
+        {"label": "Comentarios / observaciones", "tipo": "texto"},
+      ],
+    },
+    {
+      "id": "3",
+      "nombre": "Manejo seguro de grúas viajeras",
+      "categoria": "Equipos de Carga",
+      "descripcion":
+          "Capacitación práctica sobre manejo seguro de grúas viajeras y protocolos de seguridad.",
+      "imagen": "assets/CURSO_POLIPASTO.png",
+      "campos": [
+        {"label": "Modelo de grúa", "tipo": "texto"},
+        {
+          "label": "Capacidad máxima (kg)",
+          "tipo": "selector",
+          "opciones": [500, 1000, 1500, 2000, 2500],
+        },
+        {"label": "Altura mínima de operación (m)", "tipo": "numero"},
+        {"label": "Altura máxima de operación (m)", "tipo": "numero"},
+        {"label": "Número de participantes", "tipo": "numero"},
+        {"label": "Duración (hrs)", "tipo": "numero"},
+        {"label": "Lugar de capacitación", "tipo": "texto"},
+        {
+          "label": "Nivel requerido",
+          "tipo": "selector",
+          "opciones": ["Básico", "Intermedio", "Avanzado"],
+        },
+        {
+          "label": "Equipo de seguridad requerido",
+          "tipo": "selector",
+          "opciones": ["Casco", "Arnés", "Guantes", "Botas"],
+        },
+        {"label": "Instructor", "tipo": "texto"},
+        {"label": "Comentarios / observaciones", "tipo": "texto"},
+      ],
+    },
+  ];
+
+
+  Widget _vistaCapacitaciones() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 80),
+      childAspectRatio: 0.70,
+      children: _cargarCapacitaciones.map((capacitacion) {
+        final nombre = capacitacion['nombre']!;
+        final descripcion = capacitacion['descripcion']!;
+        final imagen = capacitacion['imagen']!;
+        final campos = capacitacion['campos'] as List<dynamic>;
+
+        return GestureDetector(
+          onTap: () {
+            // Campos comunes
+            final fechaController = TextEditingController();
+            final horaController = TextEditingController();
+
+            // Campos propios de cada capacitación
+            final Map<String, TextEditingController> camposControllers = {};
+            for (var campo in campos) {
+              camposControllers[campo['label']] = TextEditingController();
+            }
+
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      scrollable: true,
+                      title: Text(
+                        "Capacitación: $nombre \n $descripcion",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Campo de Fecha
+                          TextField(
+                            controller: fechaController,
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Fecha de capacitación',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.calendar_today_rounded),
+                            ),
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                                locale: const Locale('es', 'MX'),
+                              );
+                              if (pickedDate != null) {
+                                fechaController.text =
+                                    "${pickedDate.day.toString().padLeft(2, '0')}/"
+                                    "${pickedDate.month.toString().padLeft(2, '0')}/"
+                                    "${pickedDate.year}";
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Campo de Hora
+                          TextField(
+                            controller: horaController,
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Hora de capacitación',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.access_alarm_rounded),
+                            ),
+                            onTap: () async {
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (pickedTime != null) {
+                                final now = DateTime.now();
+                                horaController.text = DateFormat.jm().format(
+                                  DateTime(
+                                    now.year,
+                                    now.month,
+                                    now.day,
+                                    pickedTime.hour,
+                                    pickedTime.minute,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 12),
+
+                          // 📝 Campos propios de cada capacitación
+                          ...camposControllers.entries.map((entry) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: TextField(
+                                controller: entry.value,
+                                decoration: InputDecoration(
+                                  labelText: entry.key,
+                                  border: const OutlineInputBorder(),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text("Cancelar"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            final fecha = fechaController.text.trim();
+                            final hora = horaController.text.trim();
+
+                            if (fecha.isEmpty || hora.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Por favor completa fecha y hora",
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            // Capturar campos propios
+                            final datosCapacitacion = <String, String>{};
+                            camposControllers.forEach((campo, controller) {
+                              datosCapacitacion[campo] = controller.text.trim();
+                            });
+
+                            Navigator.of(context).pop();
+
+                            // Aquí puedes enviar los datos al backend
+                            print({
+                              "fecha": fecha,
+                              "hora": hora,
+                              "campos": datosCapacitacion,
+                            });
+                          },
+                          child: const Text("Enviar solicitud"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            );
+          },
+          child: Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child: Image.asset(imagen, fit: BoxFit.cover),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        nombre,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        "Descripción: $descripcion",
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  //METODOS DE PROYECTOS
+
+  final List<Map<String, dynamic>> _cargarProyectos = [
+    {
+      "id": "1",
+      "nombre": "Fabricación de Grúa Viajera",
+      "categoria": "Proyecto de Fabricación",
+      "descripcion":
+          "Diseño, fabricación y ensamble de grúa viajera conforme a especificaciones técnicas y normativas de seguridad industrial.",
+      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "campos": [
+        {"label": "Código del proyecto", "tipo": "texto"},
+        {"label": "Cliente / Empresa", "tipo": "texto"},
+        {"label": "Ubicación de fabricación", "tipo": "texto"},
+        {
+          "label": "Tipo de grúa",
+          "tipo": "selector",
+          "opciones": ["Monopuente", "Bipuente", "Semi-puente"],
+        },
+        {
+          "label": "Capacidad máxima (kg)",
+          "tipo": "selector",
+          "opciones": [1000, 2000, 5000, 10000, 20000],
+        },
+        {"label": "Longitud del puente (m)", "tipo": "numero"},
+        {"label": "Altura de elevación (m)", "tipo": "numero"},
+        {"label": "Fecha de inicio", "tipo": "fecha"},
+        {"label": "Fecha estimada de entrega", "tipo": "fecha"},
+        {"label": "Responsable de fabricación", "tipo": "texto"},
+        {
+          "label": "Estado del proyecto",
+          "tipo": "selector",
+          "opciones": ["Diseño", "Producción", "Inspección", "Finalizado"],
+        },
+        {
+          "label": "Material principal de estructura",
+          "tipo": "selector",
+          "opciones": ["Acero A36", "Acero ASTM A992", "Acero inoxidable"],
+        },
+        {"label": "Observaciones / notas técnicas", "tipo": "texto"},
+      ],
+    },
+  ];
+
+  Widget _vistaProyectos() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 80),
+      childAspectRatio: 0.70,
+      children: _cargarProyectos.map((proyecto) {
+        final nombre = proyecto['nombre']!;
+        final descripcion = proyecto['descripcion']!;
+        final imagen = proyecto['imagen']!;
+        final campos = proyecto['campos'] as List<dynamic>;
+
+        return GestureDetector(
+          onTap: () {
+            // Campos comunes
+            final fechaController = TextEditingController();
+            final horaController = TextEditingController();
+
+            // Campos propios de cada capacitación
+            final Map<String, TextEditingController> camposControllers = {};
+            for (var campo in campos) {
+              camposControllers[campo['label']] = TextEditingController();
+            }
+
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      scrollable: true,
+                      title: Text(
+                        "Proyecto: $nombre \n $descripcion",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Campo de Fecha
+                          TextField(
+                            controller: fechaController,
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Fecha de capacitación',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.calendar_today_rounded),
+                            ),
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                                locale: const Locale('es', 'MX'),
+                              );
+                              if (pickedDate != null) {
+                                fechaController.text =
+                                    "${pickedDate.day.toString().padLeft(2, '0')}/"
+                                    "${pickedDate.month.toString().padLeft(2, '0')}/"
+                                    "${pickedDate.year}";
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Campo de Hora
+                          TextField(
+                            controller: horaController,
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Hora de capacitación',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.access_alarm_rounded),
+                            ),
+                            onTap: () async {
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (pickedTime != null) {
+                                final now = DateTime.now();
+                                horaController.text = DateFormat.jm().format(
+                                  DateTime(
+                                    now.year,
+                                    now.month,
+                                    now.day,
+                                    pickedTime.hour,
+                                    pickedTime.minute,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 12),
+
+                          // 📝 Campos propios de cada capacitación
+                          ...camposControllers.entries.map((entry) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: TextField(
+                                controller: entry.value,
+                                decoration: InputDecoration(
+                                  labelText: entry.key,
+                                  border: const OutlineInputBorder(),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text("Cancelar"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            final fecha = fechaController.text.trim();
+                            final hora = horaController.text.trim();
+
+                            if (fecha.isEmpty || hora.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Por favor completa fecha y hora",
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            // Capturar campos propios
+                            final datosCapacitacion = <String, String>{};
+                            camposControllers.forEach((campo, controller) {
+                              datosCapacitacion[campo] = controller.text.trim();
+                            });
+
+                            Navigator.of(context).pop();
+
+                            // Aquí puedes enviar los datos al backend
+                            print({
+                              "fecha": fecha,
+                              "hora": hora,
+                              "campos": datosCapacitacion,
+                            });
+                          },
+                          child: const Text("Enviar solicitud"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            );
+          },
+          child: Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child: Image.asset(imagen, fit: BoxFit.cover),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        nombre,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       Text(
                         "Descripción: $descripcion",
@@ -2215,7 +2782,7 @@ class _UsersState extends State<Users> {
                                       ),
                                       SizedBox(width: 16),
                                       Text(
-                                        "Enviando solicitud...",
+                                        "Porque tu opinion es importante...",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(color: Colors.white),
                                       ),
@@ -2353,6 +2920,10 @@ class _UsersState extends State<Users> {
             Positioned.fill(child: _vistaAccesorios())
           else if (mostrarPatines)
             Positioned.fill(child: _vistaPatines())
+          else if (mostrarCapacitaciones)
+            Positioned.fill(child: _vistaCapacitaciones())
+          else if (mostrarProyectos)
+            Positioned.fill(child: _vistaProyectos())
           else
             GridView.count(
               crossAxisCount: 2,
@@ -2366,6 +2937,8 @@ class _UsersState extends State<Users> {
                         mostrarPatines = false;
                         mostrarServicios = false;
                         mostrarAccesorios = false;
+                        mostrarCapacitaciones = false;
+                        mostrarProyectos = false;
                         mostrarPolipastos = true;
                       });
                     } else if (tarjeta["titulo"] == "Servicios") {
@@ -2373,6 +2946,8 @@ class _UsersState extends State<Users> {
                         mostrarPatines = false;
                         mostrarPolipastos = false;
                         mostrarAccesorios = false;
+                        mostrarCapacitaciones = false;
+                        mostrarProyectos = false;
                         mostrarServicios = true;
                       });
                     } else if (tarjeta["titulo"] == "Accesorios") {
@@ -2380,6 +2955,8 @@ class _UsersState extends State<Users> {
                         mostrarPatines = false;
                         mostrarPolipastos = false;
                         mostrarServicios = false;
+                        mostrarCapacitaciones = false;
+                        mostrarProyectos = false;
                         mostrarAccesorios = true;
                       });
                     } else if (tarjeta["titulo"] == "Patines Hidráulicos") {
@@ -2387,7 +2964,27 @@ class _UsersState extends State<Users> {
                         mostrarAccesorios = false;
                         mostrarServicios = false;
                         mostrarPolipastos = false;
+                        mostrarCapacitaciones = false;
+                        mostrarProyectos = false;
                         mostrarPatines = true;
+                      });
+                    } else if (tarjeta["titulo"] == "Capacitaciones") {
+                      setState(() {
+                        mostrarAccesorios = false;
+                        mostrarServicios = false;
+                        mostrarPolipastos = false;
+                        mostrarPatines = false;
+                        mostrarProyectos = false;
+                        mostrarCapacitaciones = true;
+                      });
+                    } else if (tarjeta["titulo"] == "Proyectos") {
+                      setState(() {
+                        mostrarAccesorios = false;
+                        mostrarServicios = false;
+                        mostrarPolipastos = false;
+                        mostrarPatines = false;
+                        mostrarCapacitaciones = false;
+                        mostrarProyectos = true;
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -2447,6 +3044,8 @@ class _UsersState extends State<Users> {
             mostrarServicios = false;
             mostrarAccesorios = false;
             mostrarPatines = false;
+            mostrarCapacitaciones = false;
+            mostrarProyectos = false;
           });
         },
         child: const Icon(Icons.home, color: Colors.white),

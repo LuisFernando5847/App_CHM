@@ -101,6 +101,12 @@ flutter:
     - assets/TROLE.webp
     - assets/LIMITADOR.png
     - assets/CABLE_ALIMENTACION.webp
+    - assets/PATIN_CROWN.jpeg
+    - assets/PATIN_TOYOTA.png
+    - assets/PATIN_YALE.jpeg
+    - assets/PATIN_NOBLELIFT.jpeg
+    - assets/CURSO_POLIPASTO.png
+    - assets/GRUAS_VIAJERAS.jpg
 
 
   # The following line ensures that the Material Icons font is
