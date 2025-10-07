@@ -215,11 +215,11 @@ class _UsersState extends State<Users> {
     required String toEmail,
     required String nombreCompleto,
     required String empresa,
-    required String marcaH,
-    required String capacidadH,
+    required String nombrePatin,
+    required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5035/api/email/solicitud-patines',
+      'http://10.7.234.136:5090/api/email/solicitud-patines',
     );
     final respuesta = await http.post(
       url,
@@ -228,8 +228,8 @@ class _UsersState extends State<Users> {
         'toEmail': toEmail,
         'nombreCompleto': nombreCompleto,
         'empresa': empresa,
-        'marcaH': marcaH,
-        'capacidadH': capacidadH,
+        'nombrePatin': nombrePatin,
+        'campos': datosFormulario,
       }),
     );
     if (respuesta.statusCode == 200) {
@@ -1619,7 +1619,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Capacidad de carga (kg)",
           "tipo": "selector",
-          "opciones": [1000, 1500, 2000, 2500, 3000, 5000],
+          "opciones": ["1000", "1500", "2000", "2500", "3000", "5000"],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1651,7 +1651,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Capacidad de carga (lb)",
           "tipo": "selector",
-          "opciones": [3000, 4500, 6000, 8000],
+          "opciones": ["3000", "4500", "6000", "8000"],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1678,7 +1678,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Capacidad de carga (lb)",
           "tipo": "selector",
-          "opciones": [2500, 3500, 5500],
+          "opciones": ["2500", "3500", "5500"],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1704,7 +1704,7 @@ class _UsersState extends State<Users> {
         {
           "label": "Capacidad de carga (lb)",
           "tipo": "selector",
-          "opciones": [3000, 4500, 5500],
+          "opciones": ["3000", "4500", "5500"],
         },
         {"label": "Altura mínima (mm)", "tipo": "numero"},
         {"label": "Altura máxima (mm)", "tipo": "numero"},
@@ -1723,9 +1723,9 @@ class _UsersState extends State<Users> {
 
   void _mostrarFormularioPatines(
     BuildContext context,
-    Map<String, dynamic> accesorio,
+    Map<String, dynamic> patin,
   ) {
-    final campos = accesorio['campos'] as List<dynamic>;
+    final campos = patin['campos'] as List<dynamic>;
     final scaffoldContext = context;
 
     // Controladores para los campos de texto y seleccionados
@@ -1747,14 +1747,14 @@ class _UsersState extends State<Users> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          title: Text("Accesorio: ${accesorio['nombre']}"),
+          title: Text("Patín: ${patin['nombre']}"),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Categoría: ${accesorio['categoria']}"),
+                Text("Categoría: ${patin['categoria']}"),
                 const SizedBox(height: 8),
-                Text("Descripción: ${accesorio['descripcion']}"),
+                Text("Descripción: ${patin['descripcion']}"),
                 const SizedBox(height: 16),
 
                 // Generar campos dinámicamente
@@ -1888,13 +1888,13 @@ class _UsersState extends State<Users> {
                   ),
                 );
 
-                // Enviar correo con los datos
+                // Enviar correo con los datos==================================
                 try {
-                  await enviarCorreoAccesorio(
+                  await enviarCorreoPatinHidraulico(
                     toEmail: widget.correo,
                     nombreCompleto: widget.nombreCompleto,
                     empresa: widget.empresa,
-                    nombreAccesorio: accesorio['nombre'],
+                    nombrePatin: patin['nombre'],
                     datosFormulario: datosFormulario,
                   );
                 } catch (e) {
