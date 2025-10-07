@@ -390,7 +390,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       decoration: const InputDecoration(
-                        labelText: 'No. Cliente (dejar vacio de no contar con uno)',
+                        labelText: 'No. Cliente (Si cuentas con uno)',
                       ),
                     ),
                     const SizedBox(height: 30),
