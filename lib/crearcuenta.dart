@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
     String correo,
     String numeroCliente,
   ) async {
-    final url = Uri.parse('http://10.7.234.136:5035/api/email/send');
+    final url = Uri.parse('http://10.7.234.136:5090/api/email/send');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -250,7 +250,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Verifica el código OTP con el backend
   Future<bool> _verificarOtp(String correo, String codigo) async {
-    final url = Uri.parse('http://10.7.234.136:5035/api/email/verify');
+    final url = Uri.parse('http://10.7.234.136:5090/api/email/verify');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -270,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
     String correo,
     String numeroCliente,
   ) async {
-    final url = Uri.parse('http://10.7.234.136:5035/api/Usuarios/registrar');
+    final url = Uri.parse('http://10.7.234.136:5090/api/Usuarios/registrar');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -384,10 +384,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextField(
                       controller: numeroclienteController,
                       keyboardType: TextInputType.numberWithOptions(
-                        decimal: false
+                        decimal: false,
                       ),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'0-9')),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
                       decoration: const InputDecoration(
                         labelText: 'No. Cliente (dejar vacio de no contar con uno)',
