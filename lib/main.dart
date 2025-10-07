@@ -182,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,// NO SE MUEVE NADA SE QUEDA FIJO CUANDO ENTRA EL TECLADO
+      //resizeToAvoidBottomInset: false,// NO SE MUEVE NADA SE QUEDA FIJO CUANDO ENTRA EL TECLADO
       body: Container(
         width: double.infinity,
         height: double.infinity,
