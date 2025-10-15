@@ -42,7 +42,7 @@ class _UsersState extends State<Users> {
     Map<String, dynamic>? extras,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5090/api/email/solicitud-servicios',
+      'http://10.7.234.140:5090/api/email/solicitud-servicios',
     );
 
     final body = {
@@ -90,7 +90,7 @@ class _UsersState extends State<Users> {
     required String notas,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
+      'http://10.7.234.140:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
     );
 
     final body = {
@@ -136,7 +136,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5090/api/email/solicitud-polipastos',
+      'http://10.7.234.140:5090/api/email/solicitud-polipastos',
     );
     final body = {
       'toEmail': toEmail,
@@ -167,7 +167,7 @@ class _UsersState extends State<Users> {
       throw Exception('Error al enviar el correo: ${respuesta.body}');
     }
   }
-//
+
   Future<void> enviarCorreoAccesorio({
     required String toEmail,
     required String nombreCompleto,
@@ -176,7 +176,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario, // Campos dinámicos
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5090/api/email/solicitud-accesorios',
+      'http://10.7.234.140:5090/api/email/solicitud-accesorios',
     );
 
     final body = {
@@ -219,7 +219,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5090/api/email/solicitud-patines',
+      'http://10.7.234.140:5090/api/email/solicitud-patines',
     );
     final respuesta = await http.post(
       url,
@@ -246,6 +246,52 @@ class _UsersState extends State<Users> {
       );
     } else {
       throw Exception('Error al enviar el correo: ${respuesta.body}');
+    }
+  }
+
+  Future<void> enviarCorreoCapacitaciones({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String nombreCapacitacion,
+    required String dia,
+    required String hora,
+    Map<String, dynamic>? extras,
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.140:5090/api/email/solicitud-servicios',
+    );
+
+    final body = {
+      'toEmail': toEmail,
+      'nombreCompleto': nombreCompleto,
+      'empresa': empresa,
+      'nombreCapacitacion': nombreCapacitacion,
+      'dia': dia,
+      'hora': hora,
+      'datos': extras ?? {},
+    };
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${response.body}');
     }
   }
 
@@ -509,12 +555,14 @@ class _UsersState extends State<Users> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: campo['tipo'] == 'selector'
                         ? DropdownButtonFormField<String>(
+                            isExpanded: true,
                             value: selecValuesController[campo['label']],
                             items: (campo['opciones'] as List<String>)
                                 .map(
                                   (opcion) => DropdownMenuItem(
                                     value: opcion,
-                                    child: Text(opcion),
+                                    child: Text(opcion,
+                                    overflow: TextOverflow.ellipsis,),
                                   ),
                                 )
                                 .toList(),
@@ -1995,7 +2043,7 @@ class _UsersState extends State<Users> {
     {
       "id": "1",
       "nombre": "Manejo de Polipastos",
-      "categoria": "Equipos de Carga",
+      "categoria": "Capacitaciones",
       "descripcion": "Capacitación práctica sobre manejo seguro de polipastos.",
       "imagen": "assets/CURSO_POLIPASTO.png",
       "campos": [
@@ -2032,7 +2080,7 @@ class _UsersState extends State<Users> {
     {
       "id": "2",
       "nombre": "Soldaduras",
-      "categoria": "Equipos de Carga",
+      "categoria": "Capacitaciones",
       "descripcion":
           "Capacitación sobre técnicas de soldadura y seguridad al trabajar con equipos de carga.",
       "imagen": "assets/CURSO_POLIPASTO.png",
@@ -2065,7 +2113,7 @@ class _UsersState extends State<Users> {
     {
       "id": "3",
       "nombre": "Manejo seguro de grúas viajeras",
-      "categoria": "Equipos de Carga",
+      "categoria": "Capacitaciones",
       "descripcion":
           "Capacitación práctica sobre manejo seguro de grúas viajeras y protocolos de seguridad.",
       "imagen": "assets/CURSO_POLIPASTO.png",
@@ -2213,7 +2261,7 @@ class _UsersState extends State<Users> {
                           child: const Text("Cancelar"),
                         ),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async{
                             final fecha = fechaController.text.trim();
                             final hora = horaController.text.trim();
 
@@ -2237,12 +2285,29 @@ class _UsersState extends State<Users> {
 
                             Navigator.of(context).pop();
 
-                            // Aquí puedes enviar los datos al backend
-                            print({
-                              "fecha": fecha,
-                              "hora": hora,
-                              "campos": datosCapacitacion,
-                            });
+
+                            try {
+                              await enviarCorreoCapacitaciones(
+                                toEmail: widget.correo,
+                                nombreCompleto: widget.nombreCompleto,
+                                empresa: widget.empresa,
+                                nombreCapacitacion: nombre,
+                                dia: fecha,
+                                hora: hora,
+                                extras: datosCapacitacion,
+                              );
+                            } catch (e) {
+                              // if(!mounted) return; // chequeo de seguridad
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Error al enviar la solicitud: $e"),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
+
                           },
                           child: const Text("Enviar solicitud"),
                         ),
@@ -2305,7 +2370,7 @@ class _UsersState extends State<Users> {
     );
   }
 
-  //METODOS DE PROYECTOS
+  // METODOS DE PROYECTOS
 
   final List<Map<String, dynamic>> _cargarProyectos = [
     {
@@ -2555,6 +2620,7 @@ class _UsersState extends State<Users> {
       }).toList(),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
     String correo,
     String numeroCliente,
   ) async {
-    final url = Uri.parse('http://10.7.234.136:5090/api/email/send');
+    final url = Uri.parse('http://10.7.234.140:5090/api/email/send');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -250,7 +250,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Verifica el código OTP con el backend
   Future<bool> _verificarOtp(String correo, String codigo) async {
-    final url = Uri.parse('http://10.7.234.136:5090/api/email/verify');
+    final url = Uri.parse('http://10.7.234.140:5090/api/email/verify');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -270,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
     String correo,
     String numeroCliente,
   ) async {
-    final url = Uri.parse('http://10.7.234.136:5090/api/Usuarios/registrar');
+    final url = Uri.parse('http://10.7.234.140:5090/api/Usuarios/registrar');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -395,7 +395,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(
-                      onPressed: _validarYEnviarOtp,
+                      onPressed: (){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Row(
+                            children: [
+                              CircularProgressIndicator(
+                                value: null,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 16),
+                              Text("Enviando Código de Verificación..."),
+                            ],
+                          ),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.blue,
+                        ),
+                      );
+                      
+                      _validarYEnviarOtp();
+
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF192557),
                         padding: const EdgeInsets.symmetric(

@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    final backendUrl = Uri.parse('http://10.7.234.136:5090/api/Login');
+    final backendUrl = Uri.parse('http://10.7.234.140:5090/api/Login');
 
     try {
       final response = await http.post(
