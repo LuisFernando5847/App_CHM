@@ -2617,7 +2617,7 @@ class _UsersState extends State<Users> {
     },
     {
       "id": "4",
-      "nombre": "Grúa Portico Virriel",
+      "nombre": "Grúa Portico Birriel",
       "categoria": "Proyecto de Fabricación",
       "descripcion":
           "Diseño, fabricación y ensamble de grúa portico virriel conforme a especificaciones técnicas y normativas de seguridad industrial.",
