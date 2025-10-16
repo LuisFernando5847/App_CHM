@@ -32,7 +32,8 @@ class _UsersState extends State<Users> {
   bool mostrarProyectos = false;
 
   // METODOS PARA ENVIAR CORREOS ELECTRONICOS
-  Future<void> enviarCorreoSolicitud({
+
+  Future<void> enviarCorreoServicios({
     required String toEmail,
     required String nombreCompleto,
     required String empresa,
@@ -69,7 +70,7 @@ class _UsersState extends State<Users> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.greenAccent,
           duration: Duration(seconds: 3),
         ),
       );
@@ -78,6 +79,173 @@ class _UsersState extends State<Users> {
     }
   }
 
+  Future<void> enviarCorreoPolipastos({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String nombrePolipasto,
+    required Map<String, String> datosFormulario,
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.140:5090/api/email/solicitud-polipastos',
+    );
+    final body = {
+      'toEmail': toEmail,
+      'nombreCompleto': nombreCompleto,
+      'empresa': empresa,
+      'nombrePolipasto': nombrePolipasto,
+      'campos': datosFormulario,
+    };
+
+    final respuesta = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+    if (respuesta.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.greenAccent,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${respuesta.body}');
+    }
+  }
+
+  Future<void> enviarCorreoAccesorio({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String nombreAccesorio, // Para saber cuál se envía
+    required Map<String, String> datosFormulario, // Campos dinámicos
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.140:5090/api/email/solicitud-accesorios',
+    );
+
+    final body = {
+      'toEmail': toEmail,
+      'nombreCompleto': nombreCompleto,
+      'empresa': empresa,
+      'nombreAccesorio': nombreAccesorio,
+      'campos': datosFormulario, // Aquí van los datos dinámicos
+    };
+
+    final respuesta = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    if (respuesta.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Solicitud enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.greenAccent,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${respuesta.body}');
+    }
+  }
+
+  Future<void> enviarCorreoPatinHidraulico({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String nombrePatin,
+    required Map<String, String> datosFormulario,
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.140:5090/api/email/solicitud-patines',
+    );
+    final respuesta = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'toEmail': toEmail,
+        'nombreCompleto': nombreCompleto,
+        'empresa': empresa,
+        'nombrePatin': nombrePatin,
+        'campos': datosFormulario,
+      }),
+    );
+    if (respuesta.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.greenAccent,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${respuesta.body}');
+    }
+  }
+
+  Future<void> enviarCorreoCapacitaciones({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String nombreCapacitacion,
+    required String dia,
+    required String hora,
+    required Map<String, String> adicional,
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.140:5090/api/email/solicitud-capacitaciones',
+    );
+
+    final body = {
+      'toEmail': toEmail,
+      'nombreCompleto': nombreCompleto,
+      'empresa': empresa,
+      'tipCap': nombreCapacitacion,
+      'dias': dia,
+      'horaE': hora,
+      'extras': adicional,
+    };
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.greenAccent,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${response.body}');
+    }
+  }
+
+  // Encuesta de satisfacción
   Future<void> enviarEncuestaSatisfaccion({
     required String toEmail,
     required String nombreCompleto,
@@ -119,179 +287,12 @@ class _UsersState extends State<Users> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.greenAccent,
           duration: Duration(seconds: 3),
         ),
       );
     } else {
       throw Exception("Error al enviar encuesta: ${response.body}");
-    }
-  }
-
-  Future<void> enviarCorreoPolipastos({
-    required String toEmail,
-    required String nombreCompleto,
-    required String empresa,
-    required String nombrePolipasto,
-    required Map<String, String> datosFormulario,
-  }) async {
-    final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-polipastos',
-    );
-    final body = {
-      'toEmail': toEmail,
-      'nombreCompleto': nombreCompleto,
-      'empresa': empresa,
-      'nombrePolipasto': nombrePolipasto,
-      'campos': datosFormulario,
-    };
-
-    final respuesta = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(body),
-    );
-    if (respuesta.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Tu solicitud ha sido enviada correctamente",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
-        ),
-      );
-    } else {
-      throw Exception('Error al enviar el correo: ${respuesta.body}');
-    }
-  }
-
-  Future<void> enviarCorreoAccesorio({
-    required String toEmail,
-    required String nombreCompleto,
-    required String empresa,
-    required String nombreAccesorio, // Para saber cuál se envía
-    required Map<String, String> datosFormulario, // Campos dinámicos
-  }) async {
-    final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-accesorios',
-    );
-
-    final body = {
-      'toEmail': toEmail,
-      'nombreCompleto': nombreCompleto,
-      'empresa': empresa,
-      'nombreAccesorio': nombreAccesorio,
-      'campos': datosFormulario, // Aquí van los datos dinámicos
-    };
-
-    final respuesta = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(body),
-    );
-
-    if (respuesta.statusCode == 200) {
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Solicitud enviada correctamente",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
-        ),
-      );
-    } else {
-      throw Exception('Error al enviar el correo: ${respuesta.body}');
-    }
-  }
-
-  Future<void> enviarCorreoPatinHidraulico({
-    required String toEmail,
-    required String nombreCompleto,
-    required String empresa,
-    required String nombrePatin,
-    required Map<String, String> datosFormulario,
-  }) async {
-    final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-patines',
-    );
-    final respuesta = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'toEmail': toEmail,
-        'nombreCompleto': nombreCompleto,
-        'empresa': empresa,
-        'nombrePatin': nombrePatin,
-        'campos': datosFormulario,
-      }),
-    );
-    if (respuesta.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Tu solicitud ha sido enviada correctamente",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
-        ),
-      );
-    } else {
-      throw Exception('Error al enviar el correo: ${respuesta.body}');
-    }
-  }
-
-  Future<void> enviarCorreoCapacitaciones({
-    required String toEmail,
-    required String nombreCompleto,
-    required String empresa,
-    required String nombreCapacitacion,
-    required String dia,
-    required String hora,
-    Map<String, dynamic>? extras,
-  }) async {
-    final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-servicios',
-    );
-
-    final body = {
-      'toEmail': toEmail,
-      'nombreCompleto': nombreCompleto,
-      'empresa': empresa,
-      'nombreCapacitacion': nombreCapacitacion,
-      'dia': dia,
-      'hora': hora,
-      'datos': extras ?? {},
-    };
-
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(body),
-    );
-
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Tu solicitud ha sido enviada correctamente",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
-        ),
-      );
-    } else {
-      throw Exception('Error al enviar el correo: ${response.body}');
     }
   }
 
@@ -561,8 +562,10 @@ class _UsersState extends State<Users> {
                                 .map(
                                   (opcion) => DropdownMenuItem(
                                     value: opcion,
-                                    child: Text(opcion,
-                                    overflow: TextOverflow.ellipsis,),
+                                    child: Text(
+                                      opcion,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 )
                                 .toList(),
@@ -691,7 +694,6 @@ class _UsersState extends State<Users> {
                     nombrePolipasto: polipast['nombre'],
                     datosFormulario: datosFormulario,
                   );
-
                 } catch (e) {
                   // if(!mounted) return; // chequeo de seguridad
                   ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
@@ -993,7 +995,7 @@ class _UsersState extends State<Users> {
                             );
 
                             // Enviar al backend
-                            await enviarCorreoSolicitud(
+                            await enviarCorreoServicios(
                               toEmail: widget.correo,
                               nombreCompleto: widget.nombreCompleto,
                               empresa: widget.empresa,
@@ -1561,7 +1563,6 @@ class _UsersState extends State<Users> {
                   // Usar el contexto del widget padre (evitar contextos cerrados)
                   //if (!mounted) return;
                   //ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
-                  
                 } catch (e) {
                   // if(!mounted) return; // chequeo de seguridad
                   ScaffoldMessenger.of(scaffoldContext).hideCurrentSnackBar();
@@ -2045,68 +2046,38 @@ class _UsersState extends State<Users> {
       "nombre": "Manejo de Polipastos",
       "categoria": "Capacitaciones",
       "descripcion": "Capacitación práctica sobre manejo seguro de polipastos.",
-      "imagen": "assets/CURSO_POLIPASTO.png",
+      "imagen": "assets/Serv_Instalacion.jpeg",
       "campos": [
-        {"label": "Modelo del equipo", "tipo": "texto"},
         {
-          "label": "Capacidad de carga (kg)",
+          "label": "Capacitación",
           "tipo": "selector",
-          "opciones": [1000, 1500, 2000, 2500, 3000, 5000],
+          "opciones": ["Con certificado", "Solo capacitación"],
         },
-        {"label": "Altura mínima (mm)", "tipo": "numero"},
-        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Número de personas", "tipo": "numero"},
         {
-          "label": "Material de ruedas",
+          "label": "Tipo de polipasto",
           "tipo": "selector",
-          "opciones": ["Nylon", "Poliuretano", "Goma"],
+          "opciones": ["Manual", "Eléctrico", "Neumático"],
         },
-        {
-          "label": "Tipo de ruedas",
-          "tipo": "selector",
-          "opciones": ["Simples", "Dobles", "Articuladas"],
-        },
-        {"label": "Número de participantes", "tipo": "numero"},
-        {"label": "Duración (hrs)", "tipo": "numero"},
-        {"label": "Lugar de capacitación", "tipo": "texto"},
-        {
-          "label": "Nivel requerido",
-          "tipo": "selector",
-          "opciones": ["Básico", "Intermedio", "Avanzado"],
-        },
-        {"label": "Instructor", "tipo": "texto"},
+        {"label": "Número de contacto", "tipo": "numero"},
         {"label": "Comentarios / observaciones", "tipo": "texto"},
       ],
     },
     {
       "id": "2",
-      "nombre": "Soldaduras",
+      "nombre": "Capacitación de bombas ENERPAC",
       "categoria": "Capacitaciones",
       "descripcion":
-          "Capacitación sobre técnicas de soldadura y seguridad al trabajar con equipos de carga.",
-      "imagen": "assets/CURSO_POLIPASTO.png",
+          "Capacitación sobre el suso adecuado de bombas de la linea ENERPAC",
+      "imagen": "assets/BOMBAS.jpg",
       "campos": [
         {
-          "label": "Tipo de soldadura",
+          "label": "Capacitación",
           "tipo": "selector",
-          "opciones": ["MIG", "TIG", "Electrodo"],
+          "opciones": ["Con certificado", "Solo capacitación"],
         },
-        {"label": "Modelo del equipo", "tipo": "texto"},
-        {
-          "label": "Capacidad de carga (kg)",
-          "tipo": "selector",
-          "opciones": [1000, 1500, 2000, 2500, 3000, 5000],
-        },
-        {"label": "Altura mínima (mm)", "tipo": "numero"},
-        {"label": "Altura máxima (mm)", "tipo": "numero"},
-        {"label": "Número de participantes", "tipo": "numero"},
-        {"label": "Duración (hrs)", "tipo": "numero"},
-        {"label": "Lugar de capacitación", "tipo": "texto"},
-        {
-          "label": "Nivel requerido",
-          "tipo": "selector",
-          "opciones": ["Básico", "Intermedio", "Avanzado"],
-        },
-        {"label": "Instructor", "tipo": "texto"},
+        {"label": "Número de personas", "tipo": "numero"},
+        {"label": "Número de contacto", "tipo": "numero"},
         {"label": "Comentarios / observaciones", "tipo": "texto"},
       ],
     },
@@ -2144,7 +2115,6 @@ class _UsersState extends State<Users> {
       ],
     },
   ];
-
 
   Widget _vistaCapacitaciones() {
     return GridView.count(
@@ -2241,13 +2211,68 @@ class _UsersState extends State<Users> {
                           const SizedBox(height: 12),
 
                           // 📝 Campos propios de cada capacitación
-                          ...camposControllers.entries.map((entry) {
+                          ...campos.map((campo) {
+                            final label = campo['label'] as String;
+                            final tipo = campo['tipo'] as String;
+                            final opciones =
+                                campo['opciones'] as List<dynamic>?;
+
+                            // Controlador de texto
+                            final controller = camposControllers[label]!;
+
+                            // Si es selector, usa Dropdown
+                            if (tipo == 'selector' && opciones != null) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    labelText: label,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  items: opciones.map<DropdownMenuItem<String>>(
+                                    (opcion) {
+                                      return DropdownMenuItem(
+                                        value: opcion.toString(),
+                                        child: Text(opcion.toString()),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      controller.text = value ?? '';
+                                    });
+                                  },
+                                  value: controller.text.isNotEmpty ? controller.text : null,
+                                ),
+                              );
+                            }
+
+                            // Si es número
+                            if (tipo == 'numero') {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: TextField(
+                                  controller: controller,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    if (label == "Número de contacto") LengthLimitingTextInputFormatter(10), 
+                                  ],
+                                  decoration: InputDecoration(
+                                    labelText: label,
+                                    hintText: label == "Número de contacto"? "Ingresa un número de 10 dígitos": null,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                ),
+                              );
+                            }
+                            // Por defecto: texto
                             return Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: TextField(
-                                controller: entry.value,
+                                controller: controller,
                                 decoration: InputDecoration(
-                                  labelText: entry.key,
+                                  labelText: label,
                                   border: const OutlineInputBorder(),
                                 ),
                               ),
@@ -2261,7 +2286,7 @@ class _UsersState extends State<Users> {
                           child: const Text("Cancelar"),
                         ),
                         ElevatedButton(
-                          onPressed: () async{
+                          onPressed: () async {
                             final fecha = fechaController.text.trim();
                             final hora = horaController.text.trim();
 
@@ -2283,8 +2308,53 @@ class _UsersState extends State<Users> {
                               datosCapacitacion[campo] = controller.text.trim();
                             });
 
+                            // FILTRAR campo "Número de contacto"
+                            final numeroContacto = datosCapacitacion["Número de contacto"];
+                            if (numeroContacto != null && numeroContacto.isNotEmpty) {
+                              if (numeroContacto.length != 10) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                   SnackBar(
+                                    content: Text(
+                                      "El número de contacto debe tener 10 dígitos.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                      ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                                return;
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Por favor ingresa un número de contacto."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+
                             Navigator.of(context).pop();
 
+                            // Mostrar indicador de progreso
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Row(
+                                  children: [
+                                    CircularProgressIndicator(
+                                      value: null,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 16),
+                                    Text("Enviando solicitud..."),
+                                  ],
+                                ),
+                                duration: Duration(seconds: 5),
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
 
                             try {
                               await enviarCorreoCapacitaciones(
@@ -2294,20 +2364,23 @@ class _UsersState extends State<Users> {
                                 nombreCapacitacion: nombre,
                                 dia: fecha,
                                 hora: hora,
-                                extras: datosCapacitacion,
+                                adicional: datosCapacitacion,
                               );
                             } catch (e) {
                               // if(!mounted) return; // chequeo de seguridad
-                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(
+                                context,
+                              ).hideCurrentSnackBar();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Error al enviar la solicitud: $e"),
+                                  content: Text(
+                                    "Error al enviar la solicitud: $e",
+                                  ),
                                   backgroundColor: Colors.red,
                                   duration: Duration(seconds: 2),
                                 ),
                               );
                             }
-
                           },
                           child: const Text("Enviar solicitud"),
                         ),
@@ -2621,14 +2694,13 @@ class _UsersState extends State<Users> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> tarjetas = [
       {"titulo": "Polipastos", "imagen": "assets/Polipastos_Anim.jpeg"},
       {"titulo": "Accesorios", "imagen": "assets/Accesorios_Anim.png"},
       {"titulo": "Patines Hidráulicos", "imagen": "assets/P_Patines.jpeg"},
-      {"titulo": "Capacitaciones", "imagen": "assets/M_C_Portada.png"},
+      {"titulo": "Capacitaciones", "imagen": "assets/PORTADA_CAP.png"},
       {"titulo": "Servicios", "imagen": "assets/Monito_Servicios.png"},
       {"titulo": "Proyectos", "imagen": "assets/P_Proyectos.jpeg"},
     ];

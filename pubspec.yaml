@@ -107,6 +107,9 @@ flutter:
     - assets/PATIN_NOBLELIFT.jpeg
     - assets/CURSO_POLIPASTO.png
     - assets/GRUAS_VIAJERAS.jpg
+    - assets/BOMBAS.jpg
+    - assets/Tirfor.png
+    - assets/PORTADA_CAP.png
 
 
   # The following line ensures that the Material Icons font is
