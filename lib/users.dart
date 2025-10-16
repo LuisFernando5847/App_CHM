@@ -236,7 +236,49 @@ class _UsersState extends State<Users> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.teal,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      throw Exception('Error al enviar el correo: ${response.body}');
+    }
+  }
+
+  Future<void> enviarCorreoProyectos({
+    required String toEmail,
+    required String nombreCompleto,
+    required String empresa,
+    required String nombreProyecto,
+    required Map<String, String> adicional,
+  }) async {
+    final url = Uri.parse(
+      'http://10.7.234.140:5090/api/email/solicitud-capacitaciones',
+    );
+
+    final body = {
+      'toEmail': toEmail,
+      'nombreCompleto': nombreCompleto,
+      'empresa': empresa,
+      'tipCap': nombreProyecto,
+      'extras': adicional,
+    };
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Tu solicitud ha sido enviada correctamente",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.teal,
           duration: Duration(seconds: 3),
         ),
       );
@@ -2046,7 +2088,7 @@ class _UsersState extends State<Users> {
       "nombre": "Manejo de Polipastos",
       "categoria": "Capacitaciones",
       "descripcion": "Capacitación práctica sobre manejo seguro de polipastos.",
-      "imagen": "assets/Serv_Instalacion.jpeg",
+      "imagen": "assets/M_POLIPASTO.png",
       "campos": [
         {
           "label": "Capacitación",
@@ -2060,7 +2102,12 @@ class _UsersState extends State<Users> {
           "opciones": ["Manual", "Eléctrico", "Neumático"],
         },
         {"label": "Número de contacto", "tipo": "numero"},
-        {"label": "Comentarios / observaciones", "tipo": "texto"},
+        {
+          "label": "Comentarios / observaciones",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
       ],
     },
     {
@@ -2078,7 +2125,12 @@ class _UsersState extends State<Users> {
         },
         {"label": "Número de personas", "tipo": "numero"},
         {"label": "Número de contacto", "tipo": "numero"},
-        {"label": "Comentarios / observaciones", "tipo": "texto"},
+        {
+          "label": "Comentarios / observaciones",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
       ],
     },
     {
@@ -2087,31 +2139,26 @@ class _UsersState extends State<Users> {
       "categoria": "Capacitaciones",
       "descripcion":
           "Capacitación práctica sobre manejo seguro de grúas viajeras y protocolos de seguridad.",
-      "imagen": "assets/CURSO_POLIPASTO.png",
+      "imagen": "assets/GRUAS_VIAJERAS.jpg",
       "campos": [
-        {"label": "Modelo de grúa", "tipo": "texto"},
-        {
-          "label": "Capacidad máxima (kg)",
-          "tipo": "selector",
-          "opciones": [500, 1000, 1500, 2000, 2500],
+        {"label": "Modelo de grúa",
+        "tipo": "selector",
+        "opciones": ["Bandera","Portico Manual","Portico Electrica","Portico Virriel","Suspendida"],
         },
-        {"label": "Altura mínima de operación (m)", "tipo": "numero"},
-        {"label": "Altura máxima de operación (m)", "tipo": "numero"},
+        {
+          "label": "Capacitación",
+          "tipo": "selector",
+          "opciones": ["Con certificado", "Solo capacitación"],
+        },
         {"label": "Número de participantes", "tipo": "numero"},
-        {"label": "Duración (hrs)", "tipo": "numero"},
+        {"label": "Número de contacto", "tipo": "numero"},
         {"label": "Lugar de capacitación", "tipo": "texto"},
         {
-          "label": "Nivel requerido",
-          "tipo": "selector",
-          "opciones": ["Básico", "Intermedio", "Avanzado"],
-        },
-        {
-          "label": "Equipo de seguridad requerido",
-          "tipo": "selector",
-          "opciones": ["Casco", "Arnés", "Guantes", "Botas"],
-        },
-        {"label": "Instructor", "tipo": "texto"},
-        {"label": "Comentarios / observaciones", "tipo": "texto"},
+          "label": "Comentarios / observaciones",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+          },
       ],
     },
   ];
@@ -2242,7 +2289,9 @@ class _UsersState extends State<Users> {
                                       controller.text = value ?? '';
                                     });
                                   },
-                                  value: controller.text.isNotEmpty ? controller.text : null,
+                                  value: controller.text.isNotEmpty
+                                      ? controller.text
+                                      : null,
                                 ),
                               );
                             }
@@ -2256,21 +2305,37 @@ class _UsersState extends State<Users> {
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
-                                    if (label == "Número de contacto") LengthLimitingTextInputFormatter(10), 
+                                    if (label == "Número de contacto")
+                                      LengthLimitingTextInputFormatter(10),
                                   ],
                                   decoration: InputDecoration(
                                     labelText: label,
-                                    hintText: label == "Número de contacto"? "Ingresa un número de 10 dígitos": null,
+                                    hintText: label == "Número de contacto"
+                                        ? "Ingresa un número de 10 dígitos"
+                                        : null,
                                     border: const OutlineInputBorder(),
                                   ),
                                 ),
                               );
                             }
+                            
                             // Por defecto: texto
                             return Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: TextField(
                                 controller: controller,
+                                keyboardType: campo['multilinea'] == true
+                                      ? TextInputType.multiline
+                                      : TextInputType.text,
+                                //: TextInputType.text,
+                                maxLines: campo['multilinea'] == true ? null : 1,
+                                inputFormatters: [
+                                  if (campo['multilinea'] == true)...[
+                                    LengthLimitingTextInputFormatter(
+                                      campo['maxCaracteres'] ?? 100,
+                                    ),
+                                  ],
+                                ],
                                 decoration: InputDecoration(
                                   labelText: label,
                                   border: const OutlineInputBorder(),
@@ -2309,16 +2374,18 @@ class _UsersState extends State<Users> {
                             });
 
                             // FILTRAR campo "Número de contacto"
-                            final numeroContacto = datosCapacitacion["Número de contacto"];
-                            if (numeroContacto != null && numeroContacto.isNotEmpty) {
+                            final numeroContacto =
+                                datosCapacitacion["Número de contacto"];
+                            if (numeroContacto != null &&
+                                numeroContacto.isNotEmpty) {
                               if (numeroContacto.length != 10) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                   SnackBar(
+                                  SnackBar(
                                     content: Text(
                                       "El número de contacto debe tener 10 dígitos.",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.white),
-                                      ),
+                                    ),
                                     backgroundColor: Colors.red,
                                     duration: Duration(seconds: 2),
                                   ),
@@ -2328,13 +2395,14 @@ class _UsersState extends State<Users> {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Por favor ingresa un número de contacto."),
+                                  content: Text(
+                                    "Por favor ingresa un número de contacto.",
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
                               return;
                             }
-
 
                             Navigator.of(context).pop();
 
@@ -2351,7 +2419,7 @@ class _UsersState extends State<Users> {
                                     Text("Enviando solicitud..."),
                                   ],
                                 ),
-                                duration: Duration(seconds: 5),
+                                duration: Duration(seconds: 3),
                                 backgroundColor: Colors.blue,
                               ),
                             );
@@ -2448,63 +2516,163 @@ class _UsersState extends State<Users> {
   final List<Map<String, dynamic>> _cargarProyectos = [
     {
       "id": "1",
-      "nombre": "Fabricación de Grúa Viajera",
+      "nombre": "Grúa Bandera",
       "categoria": "Proyecto de Fabricación",
       "descripcion":
-          "Diseño, fabricación y ensamble de grúa viajera conforme a especificaciones técnicas y normativas de seguridad industrial.",
+          "Diseño, fabricación y ensamble de grúa bandera conforme a especificaciones técnicas y normativas de seguridad industrial.",
       "imagen": "assets/GRUAS_VIAJERAS.jpg",
       "campos": [
-        {"label": "Código del proyecto", "tipo": "texto"},
-        {"label": "Cliente / Empresa", "tipo": "texto"},
-        {"label": "Ubicación de fabricación", "tipo": "texto"},
+        {"label": "Altura", "tipo": "numero"},
         {
-          "label": "Tipo de grúa",
+          "label": "Capacidad (kg)",
           "tipo": "selector",
-          "opciones": ["Monopuente", "Bipuente", "Semi-puente"],
+          "opciones": ["1000 kg", "1500 kg", "2000 kg"],
         },
         {
-          "label": "Capacidad máxima (kg)",
+          "label": "Rango de giro (grados)",
           "tipo": "selector",
-          "opciones": [1000, 2000, 5000, 10000, 20000],
-        },
-        {"label": "Longitud del puente (m)", "tipo": "numero"},
-        {"label": "Altura de elevación (m)", "tipo": "numero"},
-        {"label": "Fecha de inicio", "tipo": "fecha"},
-        {"label": "Fecha estimada de entrega", "tipo": "fecha"},
-        {"label": "Responsable de fabricación", "tipo": "texto"},
-        {
-          "label": "Estado del proyecto",
-          "tipo": "selector",
-          "opciones": ["Diseño", "Producción", "Inspección", "Finalizado"],
+          "opciones": ["90°", "180°", "270°", "360°"],
         },
         {
-          "label": "Material principal de estructura",
+          "label": "Voltaje (V)",
           "tipo": "selector",
-          "opciones": ["Acero A36", "Acero ASTM A992", "Acero inoxidable"],
+          "opciones": ["220", "440"],
         },
-        {"label": "Observaciones / notas técnicas", "tipo": "texto"},
+        {
+          "label": "Tipo de equipo",
+          "tipo": "selector",
+          "opciones": ["Manual", "Eléctrico", "Neumático"],
+        },
+        {"label": "Número de contacto", "tipo": "numero"},
+        {
+          "label": "Observaciones / notas técnicas",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
+      ],
+    },
+    {
+      "id": "2",
+      "nombre": "Grúa Portico Eléctrica",
+      "categoria": "Proyecto de Fabricación",
+      "descripcion":
+          "Diseño, fabricación y ensamble de grúa portico eléctrica conforme a especificaciones técnicas industrial.",
+      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "campos": [
+        {"label": "Altura", "tipo": "numero"},
+        {"label": "Recorrido de grúa (longitud)", "tipo": "numero"},
+        {"label": "Recorrido de trole (longitud)", "tipo": "numero"},
+        {
+          "label": "Sistema de electrificación",
+          "tipo": "selector",
+          "opciones": ["Ductobarra", "Sistema festón"],
+        },
+        {
+          "label": "Voltaje (V)",
+          "tipo": "selector",
+          "opciones": ["220", "440"],
+        },
+        {
+          "label": "Capacidad (kg)",
+          "tipo": "selector",
+          "opciones": ["1000 kg", "1500 kg", "2000 kg"],
+        },
+        {"label": "Número de contacto", "tipo": "numero"},
+        {
+          "label": "Observaciones / notas técnicas",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
+      ],
+    },
+    {
+      "id": "3",
+      "nombre": "Grúa Portico Manual",
+      "categoria": "Proyecto de Fabricación",
+      "descripcion":
+          "Diseño, fabricación y ensamble de grúa portico manual conforme a especificaciones técnicas y normativas de seguridad industrial.",
+      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "campos": [
+        {"label": "Altura", "tipo": "numero"},
+        {
+          "label": "Capacidad (kg)",
+          "tipo": "selector",
+          "opciones": ["1000 kg", "1500 kg", "2000 kg"],
+        },
+        {
+          "label": "Sistema de navegación",
+          "tipo": "selector",
+          "opciones": ["Con riel", "Con ruedas"],
+        },
+        {"label": "Número de contacto", "tipo": "numero"},
+        {
+          "label": "Observaciones / notas técnicas",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
+      ],
+    },
+    {
+      "id": "4",
+      "nombre": "Grúa Portico Virriel",
+      "categoria": "Proyecto de Fabricación",
+      "descripcion":
+          "Diseño, fabricación y ensamble de grúa portico virriel conforme a especificaciones técnicas y normativas de seguridad industrial.",
+      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "campos": [
+        {"label": "Altura", "tipo": "numero"},
+        {"label": "Recorrido de grúa (longitud)", "tipo": "numero"},
+        {"label": "Recorrido de trole (longitud)", "tipo": "numero"},
+        {
+          "label": "Sistema de electrificación",
+          "tipo": "selector",
+          "opciones": ["Ductobarra", "Sistema festón"],
+        },
+        {
+          "label": "Voltaje (V)",
+          "tipo": "selector",
+          "opciones": ["220", "440"],
+        },
+        {
+          "label": "Capacidad (kg)",
+          "tipo": "selector",
+          "opciones": ["1000 kg", "1500 kg", "2000 kg"],
+        },
+        {
+          "label": "Colocación de equipo",
+          "tipo": "selector",
+          "opciones": ["Suspendido", "Sobre los puentes"],
+        },
+        {"label": "Número de contacto", "tipo": "numero"},
+        {
+          "label": "Observaciones / notas técnicas",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
       ],
     },
   ];
+
 
   Widget _vistaProyectos() {
     return GridView.count(
       crossAxisCount: 2,
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 80),
       childAspectRatio: 0.70,
-      children: _cargarProyectos.map((proyecto) {
-        final nombre = proyecto['nombre']!;
-        final descripcion = proyecto['descripcion']!;
-        final imagen = proyecto['imagen']!;
-        final campos = proyecto['campos'] as List<dynamic>;
+      children: _cargarProyectos.map((proyectos) {
+        final nombre = proyectos['nombre']!;
+        final descripcion = proyectos['descripcion']!;
+        final imagen = proyectos['imagen']!;
+        final campos = proyectos['campos'] as List<dynamic>;
 
         return GestureDetector(
           onTap: () {
-            // Campos comunes
-            final fechaController = TextEditingController();
-            final horaController = TextEditingController();
 
-            // Campos propios de cada capacitación
+            // Campos propios de cada grua
             final Map<String, TextEditingController> camposControllers = {};
             for (var campo in campos) {
               camposControllers[campo['label']] = TextEditingController();
@@ -2518,77 +2686,93 @@ class _UsersState extends State<Users> {
                     return AlertDialog(
                       scrollable: true,
                       title: Text(
-                        "Proyecto: $nombre \n $descripcion",
-                        style: const TextStyle(fontSize: 20),
+                        " $nombre \n $descripcion",
+                        style: const TextStyle(fontSize: 14),
                       ),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Campo de Fecha
-                          TextField(
-                            controller: fechaController,
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Fecha de capacitación',
-                              border: OutlineInputBorder(),
-                              suffixIcon: Icon(Icons.calendar_today_rounded),
-                            ),
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                locale: const Locale('es', 'MX'),
-                              );
-                              if (pickedDate != null) {
-                                fechaController.text =
-                                    "${pickedDate.day.toString().padLeft(2, '0')}/"
-                                    "${pickedDate.month.toString().padLeft(2, '0')}/"
-                                    "${pickedDate.year}";
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 12),
-
-                          // Campo de Hora
-                          TextField(
-                            controller: horaController,
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Hora de capacitación',
-                              border: OutlineInputBorder(),
-                              suffixIcon: Icon(Icons.access_alarm_rounded),
-                            ),
-                            onTap: () async {
-                              TimeOfDay? pickedTime = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              );
-                              if (pickedTime != null) {
-                                final now = DateTime.now();
-                                horaController.text = DateFormat.jm().format(
-                                  DateTime(
-                                    now.year,
-                                    now.month,
-                                    now.day,
-                                    pickedTime.hour,
-                                    pickedTime.minute,
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 12),
-
                           // 📝 Campos propios de cada capacitación
-                          ...camposControllers.entries.map((entry) {
+                          ...campos.map((campo) {
+                            final label = campo['label'] as String;
+                            final tipo = campo['tipo'] as String;
+                            final opciones =
+                                campo['opciones'] as List<dynamic>?;
+
+                            // Controlador de texto
+                            final controller = camposControllers[label]!;
+
+                            // Si es selector, usa Dropdown
+                            if (tipo == 'selector' && opciones != null) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    labelText: label,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  items: opciones.map<DropdownMenuItem<String>>(
+                                    (opcion) {
+                                      return DropdownMenuItem(
+                                        value: opcion.toString(),
+                                        child: Text(opcion.toString()),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      controller.text = value ?? '';
+                                    });
+                                  },
+                                  value: controller.text.isNotEmpty
+                                      ? controller.text
+                                      : null,
+                                ),
+                              );
+                            }
+
+                            // Si es número
+                            if (tipo == 'numero') {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: TextField(
+                                  controller: controller,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    if (label == "Número de contacto")
+                                      LengthLimitingTextInputFormatter(10),
+                                  ],
+                                  decoration: InputDecoration(
+                                    labelText: label,
+                                    hintText: label == "Número de contacto"
+                                        ? "Ingresa un número de 10 dígitos"
+                                        : null,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                ),
+                              );
+                            }
+                            
+                            // Por defecto: texto
                             return Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: TextField(
-                                controller: entry.value,
+                                controller: controller,
+                                keyboardType: campo['multilinea'] == true
+                                      ? TextInputType.multiline
+                                      : TextInputType.text,
+                                //: TextInputType.text,
+                                maxLines: campo['multilinea'] == true ? null : 1,
+                                inputFormatters: [
+                                  if (campo['multilinea'] == true)...[
+                                    LengthLimitingTextInputFormatter(
+                                      campo['maxCaracteres'] ?? 100,
+                                    ),
+                                  ],
+                                ],
                                 decoration: InputDecoration(
-                                  labelText: entry.key,
+                                  labelText: label,
                                   border: const OutlineInputBorder(),
                                 ),
                               ),
@@ -2602,15 +2786,37 @@ class _UsersState extends State<Users> {
                           child: const Text("Cancelar"),
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            final fecha = fechaController.text.trim();
-                            final hora = horaController.text.trim();
+                          onPressed: () async {
+                            // Capturar campos propios
+                            final datosCapacitacion = <String, String>{};
+                            camposControllers.forEach((campo, controller) {
+                              datosCapacitacion[campo] = controller.text.trim();
+                            });
 
-                            if (fecha.isEmpty || hora.isEmpty) {
+                            // FILTRAR campo "Número de contacto"
+                            final numeroContacto =
+                                datosCapacitacion["Número de contacto"];
+                            if (numeroContacto != null &&
+                                numeroContacto.isNotEmpty) {
+                              if (numeroContacto.length != 10) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "El número de contacto debe tener 10 dígitos.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                                return;
+                              }
+                            } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                    "Por favor completa fecha y hora",
+                                    "Por favor ingresa un número de contacto.",
                                   ),
                                   backgroundColor: Colors.red,
                                 ),
@@ -2618,20 +2824,49 @@ class _UsersState extends State<Users> {
                               return;
                             }
 
-                            // Capturar campos propios
-                            final datosCapacitacion = <String, String>{};
-                            camposControllers.forEach((campo, controller) {
-                              datosCapacitacion[campo] = controller.text.trim();
-                            });
-
                             Navigator.of(context).pop();
 
-                            // Aquí puedes enviar los datos al backend
-                            print({
-                              "fecha": fecha,
-                              "hora": hora,
-                              "campos": datosCapacitacion,
-                            });
+                            // Mostrar indicador de progreso
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Row(
+                                  children: [
+                                    CircularProgressIndicator(
+                                      value: null,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 16),
+                                    Text("Enviando solicitud..."),
+                                  ],
+                                ),
+                                duration: Duration(seconds: 3),
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
+
+                            try {
+                              await enviarCorreoProyectos(
+                                toEmail: widget.correo,
+                                nombreCompleto: widget.nombreCompleto,
+                                empresa: widget.empresa,
+                                nombreProyecto: nombre,
+                                adicional: datosCapacitacion,
+                              );
+                            } catch (e) {
+                              // if(!mounted) return; // chequeo de seguridad
+                              ScaffoldMessenger.of(
+                                context,
+                              ).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Error al enviar la solicitud: $e",
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
                           },
                           child: const Text("Enviar solicitud"),
                         ),
@@ -2693,7 +2928,6 @@ class _UsersState extends State<Users> {
       }).toList(),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> tarjetas = [
@@ -2702,7 +2936,7 @@ class _UsersState extends State<Users> {
       {"titulo": "Patines Hidráulicos", "imagen": "assets/P_Patines.jpeg"},
       {"titulo": "Capacitaciones", "imagen": "assets/PORTADA_CAP.png"},
       {"titulo": "Servicios", "imagen": "assets/Monito_Servicios.png"},
-      {"titulo": "Proyectos", "imagen": "assets/P_Proyectos.jpeg"},
+      {"titulo": "Proyectos", "imagen": "assets/PROYECTOS.png"},
     ];
 
     return Scaffold(

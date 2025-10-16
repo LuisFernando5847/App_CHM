@@ -110,6 +110,9 @@ flutter:
     - assets/BOMBAS.jpg
     - assets/Tirfor.png
     - assets/PORTADA_CAP.png
+    - assets/P_PROYECTOS.png
+    - assets/PROYECTOS.png
+    - assets/M_POLIPASTO.png
 
 
   # The following line ensures that the Material Icons font is
