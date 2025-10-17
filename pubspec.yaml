@@ -113,6 +113,10 @@ flutter:
     - assets/P_PROYECTOS.png
     - assets/PROYECTOS.png
     - assets/M_POLIPASTO.png
+    - assets/GRUA_BANDERA.png
+    - assets/GRUA_PORTICO_ELEC.jpg
+    - assets/GRUA_PORTICO_MAN.webp
+    - assets/GRUA_MONORRIEL.png
 
 
   # The following line ensures that the Material Icons font is

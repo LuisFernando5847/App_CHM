@@ -253,7 +253,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> adicional,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-capacitaciones',
+      'http://10.7.234.140:5090/api/email/solicitud-proyecto',
     );
 
     final body = {
@@ -278,7 +278,7 @@ class _UsersState extends State<Users> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.green,
           duration: Duration(seconds: 3),
         ),
       );
@@ -2520,7 +2520,7 @@ class _UsersState extends State<Users> {
       "categoria": "Proyecto de Fabricación",
       "descripcion":
           "Diseño, fabricación y ensamble de grúa bandera conforme a especificaciones técnicas y normativas de seguridad industrial.",
-      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "imagen": "assets/GRUA_BANDERA.png",
       "campos": [
         {"label": "Altura", "tipo": "numero"},
         {
@@ -2558,7 +2558,7 @@ class _UsersState extends State<Users> {
       "categoria": "Proyecto de Fabricación",
       "descripcion":
           "Diseño, fabricación y ensamble de grúa portico eléctrica conforme a especificaciones técnicas industrial.",
-      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "imagen": "assets/GRUA_PORTICO_ELEC.jpg",
       "campos": [
         {"label": "Altura", "tipo": "numero"},
         {"label": "Recorrido de grúa (longitud)", "tipo": "numero"},
@@ -2593,7 +2593,7 @@ class _UsersState extends State<Users> {
       "categoria": "Proyecto de Fabricación",
       "descripcion":
           "Diseño, fabricación y ensamble de grúa portico manual conforme a especificaciones técnicas y normativas de seguridad industrial.",
-      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "imagen": "assets/GRUA_PORTICO_MAN.webp",
       "campos": [
         {"label": "Altura", "tipo": "numero"},
         {
@@ -2617,10 +2617,10 @@ class _UsersState extends State<Users> {
     },
     {
       "id": "4",
-      "nombre": "Grúa Portico Birriel",
+      "nombre": "Grúa Birriel",
       "categoria": "Proyecto de Fabricación",
       "descripcion":
-          "Diseño, fabricación y ensamble de grúa portico virriel conforme a especificaciones técnicas y normativas de seguridad industrial.",
+          "Diseño, fabricación y ensamble de grúa birriel conforme a especificaciones técnicas y normativas de seguridad industrial.",
       "imagen": "assets/GRUAS_VIAJERAS.jpg",
       "campos": [
         {"label": "Altura", "tipo": "numero"},
@@ -2645,6 +2645,46 @@ class _UsersState extends State<Users> {
           "label": "Colocación de equipo",
           "tipo": "selector",
           "opciones": ["Suspendido", "Sobre los puentes"],
+        },
+        {"label": "Número de contacto", "tipo": "numero"},
+        {
+          "label": "Observaciones / notas técnicas",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
+      ],
+    },
+    {
+      "id": "5",
+      "nombre": "Grúa Monorriel",
+      "categoria": "Proyecto de Fabricación",
+      "descripcion":
+          "Diseño, fabricación y ensamble de grúa monorriel conforme a especificaciones técnicas industrial.",
+      "imagen": "assets/GRUA_MONORRIEL.png",
+      "campos": [
+        {"label": "Altura", "tipo": "numero"},
+        {"label": "Recorrido de grúa (longitud)", "tipo": "numero"},
+        {"label": "Recorrido de trole (longitud)", "tipo": "numero"},
+        {
+          "label": "Sistema de electrificación",
+          "tipo": "selector",
+          "opciones": ["Ductobarra", "Sistema festón"],
+        },
+        {
+          "label": "Tipo",
+          "tipo": "selector",
+          "opciones": ["Por columnas", "Suspendida"],
+        },
+        {
+          "label": "Voltaje (V)",
+          "tipo": "selector",
+          "opciones": ["220", "440"],
+        },
+        {
+          "label": "Capacidad (kg)",
+          "tipo": "selector",
+          "opciones": ["1000 kg", "1500 kg", "2000 kg"],
         },
         {"label": "Número de contacto", "tipo": "numero"},
         {
