@@ -43,7 +43,7 @@ class _UsersState extends State<Users> {
     Map<String, dynamic>? extras,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-servicios',
+      'http://10.7.234.137:5090/api/email/solicitud-servicios',
     );
 
     final body = {
@@ -87,7 +87,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-polipastos',
+      'http://10.7.234.137:5090/api/email/solicitud-polipastos',
     );
     final body = {
       'toEmail': toEmail,
@@ -127,7 +127,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario, // Campos dinámicos
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-accesorios',
+      'http://10.7.234.137:5090/api/email/solicitud-accesorios',
     );
 
     final body = {
@@ -169,7 +169,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-patines',
+      'http://10.7.234.137:5090/api/email/solicitud-patines',
     );
     final respuesta = await http.post(
       url,
@@ -209,7 +209,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> adicional,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-capacitaciones',
+      'http://10.7.234.137:5090/api/email/solicitud-capacitaciones',
     );
 
     final body = {
@@ -253,7 +253,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> adicional,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/solicitud-proyecto',
+      'http://10.7.234.137:5090/api/email/solicitud-proyecto',
     );
 
     final body = {
@@ -300,7 +300,7 @@ class _UsersState extends State<Users> {
     required String notas,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.140:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
+      'http://10.7.234.137:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
     );
 
     final body = {
@@ -2972,7 +2972,7 @@ class _UsersState extends State<Users> {
   Widget build(BuildContext context) {
     final List<Map<String, String>> tarjetas = [
       {"titulo": "Polipastos", "imagen": "assets/Polipastos_Anim.jpeg"},
-      {"titulo": "Accesorios", "imagen": "assets/Accesorios_Anim.png"},
+      {"titulo": "Accesorios", "imagen": "assets/ACCESORIOS.png"},
       {"titulo": "Patines Hidráulicos", "imagen": "assets/P_Patines.jpeg"},
       {"titulo": "Capacitaciones", "imagen": "assets/PORTADA_CAP.png"},
       {"titulo": "Servicios", "imagen": "assets/Monito_Servicios.png"},
