@@ -853,9 +853,9 @@ class _UsersState extends State<Users> {
     },
     {
       'id': '4',
-      'nombre': 'Inspección',
+      'nombre': 'Levantamiento',
       'categoria': 'Servicios',
-      'descripcion': 'Inspección técnica para garantizar la seguridad.',
+      'descripcion': 'Proceso de documentar un servicio para saber que se necesita.',
       'imagen': 'assets/Serv_Inspeccion.jpeg',
     },
   ];
@@ -2116,7 +2116,7 @@ class _UsersState extends State<Users> {
       "categoria": "Capacitaciones",
       "descripcion":
           "Capacitación sobre el suso adecuado de bombas de la linea ENERPAC",
-      "imagen": "assets/BOMBAS.jpg",
+      "imagen": "assets/CAP_ENERPAC.png",
       "campos": [
         {
           "label": "Capacitación",
@@ -2139,7 +2139,7 @@ class _UsersState extends State<Users> {
       "categoria": "Capacitaciones",
       "descripcion":
           "Capacitación práctica sobre manejo seguro de grúas viajeras y protocolos de seguridad.",
-      "imagen": "assets/GRUAS_VIAJERAS.jpg",
+      "imagen": "assets/MANEJO_GRUAS.png",
       "campos": [
         {"label": "Modelo de grúa",
         "tipo": "selector",
