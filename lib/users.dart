@@ -855,7 +855,8 @@ class _UsersState extends State<Users> {
       'id': '4',
       'nombre': 'Levantamiento',
       'categoria': 'Servicios',
-      'descripcion': 'Proceso de documentar un servicio para saber que se necesita.',
+      'descripcion':
+          'Proceso de documentar un servicio para saber que se necesita.',
       'imagen': 'assets/Serv_Inspeccion.jpeg',
     },
   ];
@@ -1126,7 +1127,6 @@ class _UsersState extends State<Users> {
           'tipo': 'selector',
           'opciones': ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
-
         {
           'label': 'Tipo de Botonera',
           'tipo': 'selector',
@@ -1162,20 +1162,44 @@ class _UsersState extends State<Users> {
     },
     {
       'id': '2',
-      'nombre': 'Cable de Acero',
+      'nombre': 'Trole',
       'categoria': 'Accesorios',
-      'descripcion': 'Cable de acero de carga.',
-      'imagen': 'assets/cableAcero.jpeg',
+      'descripcion': 'Trole y trole para vigas curvas',
+      'imagen': 'assets/TROLE.webp',
       'campos': [
-        {'label': 'Metros', 'tipo': 'numero'},
+        {
+          'label': 'Tipo',
+          'tipo': 'selector',
+          'opciones': ['Manual', 'Neumático', 'Eléctrico'],
+        },
         {'label': 'Capacidad de carga', 'tipo': 'numero'},
-        {'label': 'Grosor', 'tipo': 'texto'},
-        {'label': 'Tipo de Estructura', 'tipo': 'texto'},
+        {'label': 'Dimensiones de la viga', 'tipo': 'texto'},
+        {
+          'label': 'Voltaje',
+          'tipo': 'selector',
+          'opciones': ['220 V', '440 V'],
+        },
+        {'label': 'Notas', 'tipo': 'texto'},
       ],
     },
     {
       'id': '3',
-      'nombre': 'Gancho de Carga para polipasto',
+      'nombre': 'Cable de Carga',
+      'categoria': 'Accesorios',
+      'descripcion': 'Cable espaecial para realizar cargas.',
+      'imagen': 'assets/cableAcero.jpeg',
+      'campos': [
+        {'label': 'Estructura', 'tipo': 'texto'},
+        {'label': 'Longitud', 'tipo': 'numero'},
+        {'label': 'Capacidad de carga', 'tipo': 'numero'},
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'Tipo de terminado en extremos', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
+      ],
+    },
+    {
+      'id': '4',
+      'nombre': 'Gancho de carga',
       'categoria': 'Accesorios',
       'descripcion': 'Gancho de seguridad para polipastos y grúas.',
       'imagen': 'assets/GanchoSeguridad.jpeg',
@@ -1185,28 +1209,27 @@ class _UsersState extends State<Users> {
           'tipo': 'selector',
           'opciones': ['De Cable', 'De Cadena'],
         },
-        {'label': 'Marca', 'tipo': 'texto'},
-        {'label': 'Número de Serie', 'tipo': 'texto'},
-        {'label': 'Capacidad', 'tipo': 'numero'},
-      ],
-    },
-    {
-      'id': '4',
-      'nombre': 'Grillete de Carga',
-      'categoria': 'Accesorios',
-      'descripcion': 'Grillete de acero para conexión de elementos de carga.',
-      'imagen': 'assets/GRILLETE_DE_CARGA.webp',
-      'campos': [
-        {'label': 'Capacidad', 'tipo': 'numero'},
-        {
-          'label': 'Tamaño',
-          'tipo': 'selector',
-          'opciones': ['1/2"', '5/8"', '3/4"', '1"'],
-        },
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'Número de Parte', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
+        {'label': 'Capacidad de carga', 'tipo': 'numero'},
       ],
     },
     {
       'id': '5',
+      'nombre': 'Frenos de disco / Balatas',
+      'categoria': 'Accesorios',
+      'descripcion': 'Frenos de rodamiento',
+      'imagen': 'assets/FRENOS.jpeg',
+      'campos': [
+        {'label': 'Capacidad de carga', 'tipo': 'numero'},
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
+      ],
+    },
+    {
+      'id': '6',
       'nombre': 'Estrobo de Carga',
       'categoria': 'Accesorios',
       'descripcion': 'Estrobo para levantamiento de cargas pesadas.',
@@ -1228,19 +1251,25 @@ class _UsersState extends State<Users> {
       ],
     },
     {
-      'id': '6',
-      'nombre': 'Polea de carga',
+      'id': '7',
+      'nombre': 'Contactores',
       'categoria': 'Accesorios',
-      'descripcion': 'Polea de carga para redireccionamiento.',
-      'imagen': 'assets/POLEA.webp',
+      'descripcion':
+          'Elemento que establece o interrumpe la corriente electrica.',
+      'imagen': 'assets/CONTACTORES.png',
       'campos': [
-        {'label': 'Capacidad de carga', 'tipo': 'numero'},
+        {
+          'label': 'Voltaje',
+          'tipo': 'selector',
+          'opciones': ['220 V', '440 V'],
+        },
         {'label': 'Marca', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
         {'label': 'Modelo', 'tipo': 'texto'},
       ],
     },
     {
-      'id': '7',
+      'id': '8',
       'nombre': 'Tirfor',
       'categoria': 'Accesorios',
       'descripcion': 'Tirfor para tracción manual de cargas.',
@@ -1263,134 +1292,117 @@ class _UsersState extends State<Users> {
       ],
     },
     {
-      'id': '8',
-      'nombre': 'Mosquetón de Seguridad',
+      'id': '9',
+      'nombre': 'Seguro de gancho',
       'categoria': 'Accesorios',
       'descripcion': 'Mosquetón con cierre de seguridad.',
-      'imagen': 'assets/MOSQUETON.jpg',
+      'imagen': 'assets/SEGURO_DE_GANCHO.jpg',
       'campos': [
-        {'label': 'Capacidad de carga', 'tipo': 'numero'},
         {'label': 'Modelo', 'tipo': 'texto'},
         {'label': 'Marca', 'tipo': 'texto'},
-        {'label': 'Dimensiones', 'tipo': 'texto'},
-      ],
-    },
-    {
-      'id': '9',
-      'nombre': 'Cadena para estrobo',
-      'categoria': 'Accesorios',
-      'descripcion': 'Cadena resistente para elevación de objetos pesados.',
-      'imagen': 'assets/CADENAS_DE_ELEVACION.avif',
-      'campos': [
-        {
-          'label': 'Capacidad de carga',
-          'tipo': 'selector',
-          'opciones': ['Grado 80', 'Grado 100'],
-        },
-        {'label': 'Longitud (m)', 'tipo': 'numero'},
-        {'label': 'Medida de la cadena', 'tipo': 'numero'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
       ],
     },
     {
       'id': '10',
-      'nombre': 'Cadena para polipasto',
+      'nombre': 'Guias de cadena',
       'categoria': 'Accesorios',
-      'descripcion': 'Cadena resistente para elevación de objetos pesados.',
-      'imagen': 'assets/CADENAS_DE_ELEVACION.avif',
+      'descripcion':
+          'Componente que regula el angulo y dirección de la cadena.',
+      'imagen': 'assets/GUIA_DE_CADENA.jpeg',
       'campos': [
-        {'label': 'Marca', 'tipo': 'numero'},
-        {'label': 'Modelo', 'tipo': 'texto'},
-        {'label': 'No. de serie', 'tipo': 'numero'},
         {'label': 'Capacidad de carga', 'tipo': 'numero'},
-        {'label': 'Longitud (m)', 'tipo': 'numero'},
+        {'label': 'Marca', 'tipo': 'numero'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Modelo', 'tipo': 'numero'},
       ],
     },
     {
       'id': '11',
-      'nombre': 'Eslinga de poliester',
+      'nombre': 'Guarda cadena',
       'categoria': 'Accesorios',
-      'descripcion': 'Eslinga plana textil para manipulación de cargas.',
-      'imagen': 'assets/ESLINGA_DE_POLIESTER.jpg',
+      'descripcion': 'Protege, sostiene y transporta cadenas en su interior.',
+      'imagen': 'assets/GUARDA_CADENA.png',
+      'campos': [
+        {'label': 'Marca', 'tipo': 'texto'},
+        {'label': 'Modelo', 'tipo': 'texto'},
+        {'label': 'Longitud de cadena (m)', 'tipo': 'numero'},
+      ],
+    },
+    {
+      'id': '12',
+      'nombre': 'Cadena',
+      'categoria': 'Accesorios',
+      'descripcion': 'Elemento que soporta y eleva cargas.',
+      'imagen': 'assets/CADENAS_DE_ELEVACION.avif',
       'campos': [
         {'label': 'Longitud (m)', 'tipo': 'numero'},
-        {'label': 'Grosor', 'tipo': 'numero'},
-        {'label': 'Posicion de Carga', 'tipo': 'texto'},
+        {'label': 'Medida', 'tipo': 'numero'},
+        {'label': 'Marca', 'tipo': 'texto'},
+        {'label': 'Modelo', 'tipo': 'texto'},
         {'label': 'Capacidad de carga', 'tipo': 'numero'},
-        {'label': 'Notas', 'tipo': 'texto'},
-      ],
-    },
-    {
-      'id': '12',
-      'nombre': 'Tensor',
-      'categoria': 'Accesorios',
-      'descripcion': 'Tensor para ajuste de cables o estrobos.',
-      'imagen': 'assets/TENSOR.webp',
-      'campos': [
-        {
-          'label': 'Tipo',
-          'tipo': 'selector',
-          'opciones': ['Gancho-Gancho', 'Ojo-Ojo', 'Gancho-Ojo'],
-        },
-        {'label': 'Capacidad', 'tipo': 'numero'},
-        {'label': 'Longitud', 'tipo': 'numero'},
-      ],
-    },
-    {
-      'id': '12',
-      'nombre': 'Trole',
-      'categoria': 'Accesorios',
-      'descripcion': 'Trole y trole para vigas curvas',
-      'imagen': 'assets/TROLE.webp',
-      'campos': [
-        {
-          'label': 'Tipo',
-          'tipo': 'selector',
-          'opciones': ['Manual', 'Neumático', 'Eléctrico'],
-        },
-        {'label': 'Capacidad de carga', 'tipo': 'numero'},
-        {'label': 'Dimensiones de la viga', 'tipo': 'texto'},
-        {'label': 'Nota', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Características especiales', 'tipo': 'texto'},
       ],
     },
     {
       'id': '13',
-      'nombre': 'Polea con Gancho',
+      'nombre': 'Bobina / inductor',
       'categoria': 'Accesorios',
-      'descripcion': 'Polea giratoria con gancho de seguridad.',
-      'imagen': 'assets/POLEA_CON_GANCHO.jpg',
+      'descripcion': 'Bobinas de freno electromagnéticas.',
+      'imagen': 'assets/BOBINAS.jpeg',
       'campos': [
-        {'label': 'Capacidad de carga', 'tipo': 'numero'},
+        {
+          'label': 'Voltaje',
+          'tipo': 'selector',
+          'opciones': ['220 V', '440 V'],
+        },
+        {
+          'label': 'Corriente',
+          'tipo': 'selector',
+          'opciones': ['Directa', 'Alterna'],
+        },
+        {'label': 'Marca', 'tipo': 'texto'},
+        {'label': 'Modelo', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
       ],
     },
     {
       'id': '14',
-      'nombre': 'Topes de Seguridad',
+      'nombre': 'Nuez de carga',
       'categoria': 'Accesorios',
-      'descripcion': 'Topes para limitar el recorrido en rieles de polipasto',
-      'imagen': 'assets/GUIAS_DE_CABLE.webp',
+      'descripcion':
+          'Herramienta de sujeción que garantiza el izaje de objetos pesados.',
+      'imagen': 'assets/NUEZ_DE_CARGA.jpg',
       'campos': [
-        {
-          'label': 'Tipo',
-          'tipo': 'selector',
-          'opciones': ['Acero', 'Goma', 'Eléctrico'],
-        },
-        {
-          'label': 'Lugar de montaje',
-          'tipo': 'selector',
-          'opciones': ['Cabezal', 'Rieles de la grua'],
-        },
+        {'label': 'Capacidad de carga', 'tipo': 'numero'},
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
       ],
     },
     {
       'id': '15',
-      'nombre': 'Limitador de carga para elevadores',
+      'nombre': 'Engranes',
+      'categoria': 'Accesorios',
+      'descripcion': 'Mecanismo motriz que recibe movimiento o fuerza.',
+      'imagen': 'assets/ENGRANE.jpg',
+      'campos': [
+        {'label': 'Marca', 'tipo': 'texto'},
+        {'label': 'Modelo', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+      ],
+    },
+    {
+      'id': '16',
+      'nombre': 'Limit switch',
       'categoria': 'Accesorios',
       'descripcion': 'Dispositivo de seguridad para evitar sobrecarga.',
       'imagen': 'assets/LIMITADOR.png',
       'campos': [
         {'label': 'Marca', 'tipo': 'texto'},
         {'label': 'Modelo', 'tipo': 'texto'},
-        {'label': 'Capacidad máxima', 'tipo': 'numero'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
         {
           'label': 'Instalacion',
           'tipo': 'selector',
@@ -1404,21 +1416,55 @@ class _UsersState extends State<Users> {
       ],
     },
     {
-      'id': '16',
-      'nombre': 'Cable para polipasto electrico',
+      'id': '17',
+      'nombre': 'Cable de control',
       'categoria': 'Accesorios',
       'descripcion': 'Cables para alimentación de polipastos.',
       'imagen': 'assets/CABLE_ALIMENTACION.webp',
       'campos': [
-        {
-          'label': 'Tipo',
-          'tipo': 'selector',
-          'opciones': ['Plano', 'Redondo'],
-        },
         {'label': 'Calibre', 'tipo': 'texto'},
         {'label': 'Numero de hilos', 'tipo': 'numero'},
-        {'label': 'Metros', 'tipo': 'numero'},
+        {'label': 'Longitud (m)', 'tipo': 'numero'},
         {'label': 'Notas', 'tipo': 'texto'},
+      ],
+    },
+    {
+      'id': '18',
+      'nombre': 'Rodamientos',
+      'categoria': 'Accesorios',
+      'descripcion':
+          'Rodamiento para altas jornadas laborales, para polipastos o similares',
+      'imagen': 'assets/RODAMIENTOS.jpg',
+      'campos': [
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
+        {'label': 'Nomenclatura del rodamiento', 'tipo': 'texto'},
+      ],
+    },
+    {
+      'id': '19',
+      'nombre': 'Flechas o ejes de piñon',
+      'categoria': 'Accesorios',
+      'descripcion': '',
+      'imagen': 'assets/FLECHA.jpg',
+      'campos': [
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
+      ],
+    },
+    {
+      'id': '20',
+      'nombre': 'Ruedas o rodajas de trole',
+      'categoria': 'Accesorios',
+      'descripcion': '',
+      'imagen': 'assets/FLECHA.jpg',
+      'campos': [
+        {'label': 'Marca del polipasto', 'tipo': 'texto'},
+        {'label': 'No. de parte', 'tipo': 'texto'},
+        {'label': 'Modelo del polipasto', 'tipo': 'texto'},
+        {'label': 'Capacidad de carga (kg)', 'tipo': 'numero'},
       ],
     },
   ];
@@ -1758,58 +1804,6 @@ class _UsersState extends State<Users> {
         {"label": "Garantía", "tipo": "texto"},
       ],
     },
-    {
-      "id": "3",
-      "nombre": "Patín Hidráulico Yale",
-      "categoria": "Equipos de Carga",
-      "descripcion": "Patín hidráulico de la marca Yale",
-      "imagen": "assets/PATIN_YALE.jpeg",
-      "campos": [
-        {"label": "Modelo", "tipo": "texto"},
-        {
-          "label": "Capacidad de carga (lb)",
-          "tipo": "selector",
-          "opciones": ["2500", "3500", "5500"],
-        },
-        {"label": "Altura mínima (mm)", "tipo": "numero"},
-        {"label": "Altura máxima (mm)", "tipo": "numero"},
-        {"label": "Longitud de horquillas (mm)", "tipo": "numero"},
-        {"label": "Ancho total (mm)", "tipo": "numero"},
-        {
-          "label": "Material de ruedas",
-          "tipo": "selector",
-          "opciones": ["Poliuretano", "Nylon"],
-        },
-        {"label": "Peso del equipo (kg)", "tipo": "numero"},
-        {"label": "Opciones especiales", "tipo": "texto"},
-      ],
-    },
-    {
-      "id": "4",
-      "nombre": "Patín Hidráulico Noblelift",
-      "categoria": "Equipos de Carga",
-      "descripcion": "Patín hidráulico de la marca Noblelift",
-      "imagen": "assets/PATIN_NOBLELIFT.jpeg",
-      "campos": [
-        {"label": "Modelo", "tipo": "texto"},
-        {
-          "label": "Capacidad de carga (lb)",
-          "tipo": "selector",
-          "opciones": ["3000", "4500", "5500"],
-        },
-        {"label": "Altura mínima (mm)", "tipo": "numero"},
-        {"label": "Altura máxima (mm)", "tipo": "numero"},
-        {"label": "Longitud de horquillas (in)", "tipo": "numero"},
-        {"label": "Ancho total (in)", "tipo": "numero"},
-        {
-          "label": "Material de ruedas",
-          "tipo": "selector",
-          "opciones": ["Poliuretano", "Nylon"],
-        },
-        {"label": "Peso del equipo (kg)", "tipo": "numero"},
-        {"label": "Garantía", "tipo": "texto"},
-      ],
-    },
   ];
 
   void _mostrarFormularioPatines(
@@ -2081,7 +2075,6 @@ class _UsersState extends State<Users> {
   }
 
   // METODOS PARA CAPACITACIONES
-
   final List<Map<String, dynamic>> _cargarCapacitaciones = [
     {
       "id": "1",
@@ -2141,9 +2134,16 @@ class _UsersState extends State<Users> {
           "Capacitación práctica sobre manejo seguro de grúas viajeras y protocolos de seguridad.",
       "imagen": "assets/MANEJO_GRUAS.png",
       "campos": [
-        {"label": "Modelo de grúa",
-        "tipo": "selector",
-        "opciones": ["Bandera","Portico Manual","Portico Electrica","Portico Virriel","Suspendida"],
+        {
+          "label": "Modelo de grúa",
+          "tipo": "selector",
+          "opciones": [
+            "Bandera",
+            "Portico Manual",
+            "Portico Electrica",
+            "Portico Virriel",
+            "Suspendida",
+          ],
         },
         {
           "label": "Capacitación",
@@ -2158,7 +2158,7 @@ class _UsersState extends State<Users> {
           "tipo": "texto",
           'multilinea': true,
           'maxCaracteres': 500,
-          },
+        },
       ],
     },
   ];
@@ -2318,19 +2318,21 @@ class _UsersState extends State<Users> {
                                 ),
                               );
                             }
-                            
+
                             // Por defecto: texto
                             return Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: TextField(
                                 controller: controller,
                                 keyboardType: campo['multilinea'] == true
-                                      ? TextInputType.multiline
-                                      : TextInputType.text,
+                                    ? TextInputType.multiline
+                                    : TextInputType.text,
                                 //: TextInputType.text,
-                                maxLines: campo['multilinea'] == true ? null : 1,
+                                maxLines: campo['multilinea'] == true
+                                    ? null
+                                    : 1,
                                 inputFormatters: [
-                                  if (campo['multilinea'] == true)...[
+                                  if (campo['multilinea'] == true) ...[
                                     LengthLimitingTextInputFormatter(
                                       campo['maxCaracteres'] ?? 100,
                                     ),
@@ -2512,7 +2514,6 @@ class _UsersState extends State<Users> {
   }
 
   // METODOS DE PROYECTOS
-
   final List<Map<String, dynamic>> _cargarProyectos = [
     {
       "id": "1",
@@ -2697,25 +2698,26 @@ class _UsersState extends State<Users> {
     },
   ];
 
-
   Widget _vistaProyectos() {
     return GridView.count(
       crossAxisCount: 2,
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 80),
       childAspectRatio: 0.70,
-      children: _cargarProyectos.map((proyectos) {
-        final nombre = proyectos['nombre']!;
-        final descripcion = proyectos['descripcion']!;
-        final imagen = proyectos['imagen']!;
-        final campos = proyectos['campos'] as List<dynamic>;
-
-        return GestureDetector(
+      children: [
+        GestureDetector(
           onTap: () {
+            String? proyectoSeleccionado;
+            Map<String, dynamic>? proyectoActual;
+            Map<String, TextEditingController> camposControllers = {};
+            Map<String, Map<String, TextEditingController>>
+            todos_los_controladores = {};
 
-            // Campos propios de cada grua
-            final Map<String, TextEditingController> camposControllers = {};
-            for (var campo in campos) {
-              camposControllers[campo['label']] = TextEditingController();
+            void limpiarCamposProyecto(String nombreProyecto) {
+              if (todos_los_controladores.containsKey(nombreProyecto)) {
+                for (var controller in todos_los_controladores[nombreProyecto]!.values) {
+                  controller.clear();
+                }
+              }
             }
 
             showDialog(
@@ -2723,26 +2725,21 @@ class _UsersState extends State<Users> {
               builder: (BuildContext context) {
                 return StatefulBuilder(
                   builder: (context, setState) {
-                    return AlertDialog(
-                      scrollable: true,
-                      title: Text(
-                        " $nombre \n $descripcion",
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
+                    // Método interno para construir el formulario dinámico
+                    Widget _formularioProyecto(Map<String, dynamic> proyecto) {
+                      final campos = proyecto['campos'] as List<dynamic>;
+
+
+                      return Column(
                         children: [
-                          // 📝 Campos propios de cada capacitación
                           ...campos.map((campo) {
                             final label = campo['label'] as String;
                             final tipo = campo['tipo'] as String;
                             final opciones =
                                 campo['opciones'] as List<dynamic>?;
 
-                            // Controlador de texto
                             final controller = camposControllers[label]!;
 
-                            // Si es selector, usa Dropdown
                             if (tipo == 'selector' && opciones != null) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 12),
@@ -2752,10 +2749,10 @@ class _UsersState extends State<Users> {
                                     border: const OutlineInputBorder(),
                                   ),
                                   items: opciones.map<DropdownMenuItem<String>>(
-                                    (opcion) {
+                                    (op) {
                                       return DropdownMenuItem(
-                                        value: opcion.toString(),
-                                        child: Text(opcion.toString()),
+                                        value: op.toString(),
+                                        child: Text(op.toString()),
                                       );
                                     },
                                   ).toList(),
@@ -2771,7 +2768,6 @@ class _UsersState extends State<Users> {
                               );
                             }
 
-                            // Si es número
                             if (tipo == 'numero') {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 12),
@@ -2793,23 +2789,23 @@ class _UsersState extends State<Users> {
                                 ),
                               );
                             }
-                            
-                            // Por defecto: texto
+
+                            // Por defecto: campo de texto
                             return Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: TextField(
                                 controller: controller,
                                 keyboardType: campo['multilinea'] == true
-                                      ? TextInputType.multiline
-                                      : TextInputType.text,
-                                //: TextInputType.text,
-                                maxLines: campo['multilinea'] == true ? null : 1,
+                                    ? TextInputType.multiline
+                                    : TextInputType.text,
+                                maxLines: campo['multilinea'] == true
+                                    ? null
+                                    : 1,
                                 inputFormatters: [
-                                  if (campo['multilinea'] == true)...[
+                                  if (campo['multilinea'] == true)
                                     LengthLimitingTextInputFormatter(
                                       campo['maxCaracteres'] ?? 100,
                                     ),
-                                  ],
                                 ],
                                 decoration: InputDecoration(
                                   labelText: label,
@@ -2818,97 +2814,144 @@ class _UsersState extends State<Users> {
                               ),
                             );
                           }).toList(),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final datos = <String, String>{};
+                              camposControllers.forEach((label, controller) {
+                                datos[label] = controller.text.trim();
+                              });
+
+                              // Validación de número de contacto
+                              final numero = datos["Número de contacto"];
+                              if (numero == null || numero.length != 10) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "Ingresa un número de contacto válido (10 dígitos)",
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+                              Navigator.of(context).pop();
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Row(
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text("Enviando solicitud..."),
+                                    ],
+                                  ),
+                                  backgroundColor: Colors.blue,
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+
+                              try {
+                                await enviarCorreoProyectos(
+                                  toEmail: widget.correo,
+                                  nombreCompleto: widget.nombreCompleto,
+                                  empresa: widget.empresa,
+                                  nombreProyecto: proyecto['nombre'],
+                                  adicional: datos,
+                                );
+
+                                // Limpia los campos del proyecto actual después de enviar
+                                limpiarCamposProyecto(proyecto['nombre']);
+                                
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Error al enviar: $e"),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text("Enviar solicitud"),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return AlertDialog(
+                      scrollable: true,
+                      title: const Text(
+                        "Solicitud de Proyecto",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                              labelText: "Selecciona un proyecto",
+                              border: OutlineInputBorder(),
+                            ),
+                            value: proyectoSeleccionado,
+                            items: _cargarProyectos.map((proyecto) {
+                              return DropdownMenuItem<String>(
+                                value: proyecto['nombre'] as String,
+                                child: Text(proyecto['nombre'] as String),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                proyectoSeleccionado = value;
+                                proyectoActual = _cargarProyectos.firstWhere(
+                                  (p) => p['nombre'] == value,
+                                );
+
+                                // Si el proyecto NO tiene controladores aún, los crea
+                                if (!todos_los_controladores.containsKey(value)) {
+                                  todos_los_controladores[value!] = {
+                                    for (var campo in proyectoActual!['campos'])
+                                      campo['label']: TextEditingController(),
+                                  };
+                                }
+
+                                // Asignamos los controladores actuales según el proyecto
+                                camposControllers = todos_los_controladores[value]!;
+                              });
+                            },
+
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Mostrar contenido del proyecto seleccionado
+                          if (proyectoActual != null) ...[
+                            Image.asset(
+                              proyectoActual!['imagen'],
+                              fit: BoxFit.cover,
+                              height: 150,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              proyectoActual!['descripcion'],
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 10),
+                            _formularioProyecto(proyectoActual!),
+                          ],
                         ],
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("Cancelar"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            // Capturar campos propios
-                            final datosCapacitacion = <String, String>{};
-                            camposControllers.forEach((campo, controller) {
-                              datosCapacitacion[campo] = controller.text.trim();
-                            });
-
-                            // FILTRAR campo "Número de contacto"
-                            final numeroContacto =
-                                datosCapacitacion["Número de contacto"];
-                            if (numeroContacto != null &&
-                                numeroContacto.isNotEmpty) {
-                              if (numeroContacto.length != 10) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "El número de contacto debe tener 10 dígitos.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                                return;
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "Por favor ingresa un número de contacto.",
-                                  ),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            }
-
-                            Navigator.of(context).pop();
-
-                            // Mostrar indicador de progreso
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Row(
-                                  children: [
-                                    CircularProgressIndicator(
-                                      value: null,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 16),
-                                    Text("Enviando solicitud..."),
-                                  ],
-                                ),
-                                duration: Duration(seconds: 3),
-                                backgroundColor: Colors.blue,
-                              ),
-                            );
-
-                            try {
-                              await enviarCorreoProyectos(
-                                toEmail: widget.correo,
-                                nombreCompleto: widget.nombreCompleto,
-                                empresa: widget.empresa,
-                                nombreProyecto: nombre,
-                                adicional: datosCapacitacion,
-                              );
-                            } catch (e) {
-                              // if(!mounted) return; // chequeo de seguridad
-                              ScaffoldMessenger.of(
-                                context,
-                              ).hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Error al enviar la solicitud: $e",
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          },
-                          child: const Text("Enviar solicitud"),
+                          child: const Text("Cerrar"),
                         ),
                       ],
                     );
@@ -2924,50 +2967,30 @@ class _UsersState extends State<Users> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                    child: Image.asset(imagen, fit: BoxFit.cover),
-                  ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.construction, size: 70, color: Colors.blueGrey),
+                SizedBox(height: 10),
+                Text(
+                  "Solicitar Proyecto",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        nombre,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        "Descripción: $descripcion",
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Selecciona un tipo de proyecto para llenar su formulario correspondiente.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
                   ),
                 ),
               ],
             ),
           ),
-        );
-      }).toList(),
+        ),
+      ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> tarjetas = [

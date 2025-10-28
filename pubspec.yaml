@@ -120,6 +120,17 @@ flutter:
     - assets/MANEJO_GRUAS.png
     - assets/CAP_ENERPAC.png
     - assets/ACCESORIOS.png
+    - assets/FRENOS.jpeg
+    - assets/CONTACTORES.png
+    - assets/SEGURO_DE_GANCHO.jpg
+    - assets/GUIA_DE_CADENA.jpeg
+    - assets/GUARDA_CADENA.png
+    - assets/BOBINAS.jpeg
+    - assets/NUEZ_DE_CARGA.jpg
+    - assets/ENGRANE.jpg
+    - assets/RODAMIENTOS.jpg
+    - assets/FLECHA.jpg
+    - assets/RUEDA_TROLE.webp
 
 
   # The following line ensures that the Material Icons font is
