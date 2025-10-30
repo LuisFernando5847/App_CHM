@@ -84,7 +84,6 @@ flutter:
     - assets/Monito_Servicios.png
     - assets/Monito_Cap.png
     - assets/Monito_Cap_Acces.png
-    - assets/Accesorios_Anim.png
     - assets/M_C_Portada.png
     - assets/GRILLETE_DE_CARGA.webp
     - assets/ESTROBO_DE_CARGA.jpg
@@ -101,10 +100,6 @@ flutter:
     - assets/TROLE.webp
     - assets/LIMITADOR.png
     - assets/CABLE_ALIMENTACION.webp
-    - assets/PATIN_CROWN.jpeg
-    - assets/PATIN_TOYOTA.png
-    - assets/PATIN_YALE.jpeg
-    - assets/PATIN_NOBLELIFT.jpeg
     - assets/CURSO_POLIPASTO.png
     - assets/GRUAS_VIAJERAS.jpg
     - assets/BOMBAS.jpg
@@ -131,6 +126,12 @@ flutter:
     - assets/RODAMIENTOS.jpg
     - assets/FLECHA.jpg
     - assets/RUEDA_TROLE.webp
+    - assets/PATIN_H.png
+    - assets/MINI_MONTA_MANUAL.png
+    - assets/CARGA_TAMBOS.png
+    - assets/RODAJA.jpg
+    - assets/CAP_PRINCI.png
+    - assets/P_SERVICIOS.png
 
 
   # The following line ensures that the Material Icons font is

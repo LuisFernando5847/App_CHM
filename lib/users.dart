@@ -834,30 +834,59 @@ class _UsersState extends State<Users> {
       'id': '1',
       'nombre': 'Mantenimiento Preventivo',
       'categoria': 'Servicios',
-      'descripcion': 'Revisión y mantenimiento programado para evitar fallas.',
+      'descripcion': 'Revisión mecánica y eléctrica completa para reducir desgastes y/o daños mayores.',
       'imagen': 'assets/Serv_MantePrev.jpeg',
+      "campos": [
+        {
+          "label": "Comentarios / observaciones",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
+      ],
     },
     {
       'id': '2',
       'nombre': 'Mantenimiento Correctivo',
       'categoria': 'Servicios',
-      'descripcion': 'Reparación de fallas y reemplazo de piezas defectuosas.',
+      'descripcion': 'Correción y cambio de piezas para un correcto funcionamiento eléctrico y mecánico.',
       'imagen': 'assets/Serv_Rep_E.jpeg',
+      "campos": [
+        {
+          "label": "Comentarios / observaciones",
+          "tipo": "texto",
+          'multilinea': true,
+          'maxCaracteres': 500,
+        },
+      ],
     },
     {
       'id': '3',
-      'nombre': 'Instalación',
+      'nombre': 'Montaje de equipo',
       'categoria': 'Servicios',
-      'descripcion': 'Instalación de equipos y sistemas de carga.',
+      'descripcion': 'Colocación del equipo y correcta conexión de fases y pruebas de uso.',
       'imagen': 'assets/Serv_Instalacion.jpeg',
+      "campos": [
+        {"label": "Área a trabajar", "tipo": "texto"},
+        {"label": "Altura (m)", "tipo": "numero"},
+        {
+          "label": "Tipo de suspención",
+          "tipo": "selector",
+          "opciones": ["Trole", "Gancho", "Fija"],
+        },
+        {"label": "Número de contacto", "tipo": "numero"},
+      ],
     },
     {
       'id': '4',
       'nombre': 'Levantamiento',
       'categoria': 'Servicios',
       'descripcion':
-          'Proceso de documentar un servicio para saber que se necesita.',
+          'Visita ténica para mediciones, características y revisión para la instalación de equipos de carga.',
       'imagen': 'assets/Serv_Inspeccion.jpeg',
+      "campos": [
+        {"label": "EPP a ocupar", "tipo": "texto"},
+      ],
     },
   ];
 
@@ -866,37 +895,24 @@ class _UsersState extends State<Users> {
       crossAxisCount: 2,
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 80),
       childAspectRatio: 0.70,
-      children: _cargarServicios.map((producto) {
-        //final id = producto['id']!;
-        final nombre = producto['nombre']!;
-        final categoria = producto['categoria']!;
-        final descripcion = producto['descripcion']!;
-        final imagen = producto['imagen']!; // desde tus assets locales
+      children: _cargarServicios.map((servicio) {
+        final nombre = servicio['nombre']!;
+        final descripcion = servicio['descripcion']!;
+        final imagen = servicio['imagen']!;
+        final campos = servicio['campos'] as List<dynamic>;
 
         return GestureDetector(
           onTap: () {
-            final diaController = TextEditingController();
+            // Campos comunes
+            final fechaController = TextEditingController();
             final horaController = TextEditingController();
 
-            // ⚡ Detectar campos extra según el nombre del servicio
-            final Map<String, TextEditingController> extraControllers = {};
-            List<String> extrasRequeridos = [];
-
-            if (nombre.toLowerCase().contains("mantenimiento")) {
-              extrasRequeridos = ["Equipo", "Número de Serie"];
-            } else if (nombre.toLowerCase().contains("reparación")) {
-              extrasRequeridos = ["Descripción de la falla"];
-            } else if (nombre.toLowerCase().contains("instalación")) {
-              extrasRequeridos = ["Ubicación", "Modelo"];
-            } else if (nombre.toLowerCase().contains("inspección")) {
-              extrasRequeridos = ["Inspector asignado", "Área"];
+            // Campos propios de cada capacitación
+            final Map<String, TextEditingController> camposControllers = {};
+            for (var campo in campos) {
+              camposControllers[campo['label']] = TextEditingController();
             }
 
-            for (var campo in extrasRequeridos) {
-              extraControllers[campo] = TextEditingController();
-            }
-
-            // Mostrar el diálogo
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -905,18 +921,18 @@ class _UsersState extends State<Users> {
                     return AlertDialog(
                       scrollable: true,
                       title: Text(
-                        "Solicitud de: $nombre \n $descripcion",
+                        "Capacitación: $nombre \n $descripcion",
                         style: const TextStyle(fontSize: 20),
                       ),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Fecha
+                          // Campo de Fecha
                           TextField(
-                            controller: diaController,
+                            controller: fechaController,
                             readOnly: true,
                             decoration: const InputDecoration(
-                              labelText: 'Fecha del servicio',
+                              labelText: 'Fecha de capacitación',
                               border: OutlineInputBorder(),
                               suffixIcon: Icon(Icons.calendar_today_rounded),
                             ),
@@ -929,22 +945,21 @@ class _UsersState extends State<Users> {
                                 locale: const Locale('es', 'MX'),
                               );
                               if (pickedDate != null) {
-                                String formattedDate =
+                                fechaController.text =
                                     "${pickedDate.day.toString().padLeft(2, '0')}/"
                                     "${pickedDate.month.toString().padLeft(2, '0')}/"
                                     "${pickedDate.year}";
-                                diaController.text = formattedDate;
                               }
                             },
                           ),
                           const SizedBox(height: 12),
 
-                          // Hora
+                          // Campo de Hora
                           TextField(
                             controller: horaController,
                             readOnly: true,
                             decoration: const InputDecoration(
-                              labelText: 'Hora del servicio',
+                              labelText: 'Hora de capacitación',
                               border: OutlineInputBorder(),
                               suffixIcon: Icon(Icons.access_alarm_rounded),
                             ),
@@ -952,12 +967,10 @@ class _UsersState extends State<Users> {
                               TimeOfDay? pickedTime = await showTimePicker(
                                 context: context,
                                 initialTime: TimeOfDay.now(),
-                                //initialEntryMode: TimePickerEntryMode.dial,
-                                //helpText: 'Seleccione la hora de servicio',
                               );
                               if (pickedTime != null) {
                                 final now = DateTime.now();
-                                final formattedTime = DateFormat.jm().format(
+                                horaController.text = DateFormat.jm().format(
                                   DateTime(
                                     now.year,
                                     now.month,
@@ -966,20 +979,94 @@ class _UsersState extends State<Users> {
                                     pickedTime.minute,
                                   ),
                                 );
-                                horaController.text = formattedTime;
                               }
                             },
                           ),
                           const SizedBox(height: 12),
 
-                          // Campos adicionales dinámicos
-                          ...extraControllers.entries.map((entry) {
+                          // 📝 Campos propios de cada servicio
+                          ...campos.map((campo) {
+                            final label = campo['label'] as String;
+                            final tipo = campo['tipo'] as String;
+                            final opciones =
+                                campo['opciones'] as List<dynamic>?;
+
+                            // Controlador de texto
+                            final controller = camposControllers[label]!;
+
+                            // Si es selector, usa Dropdown
+                            if (tipo == 'selector' && opciones != null) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    labelText: label,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  items: opciones.map<DropdownMenuItem<String>>(
+                                    (opcion) {
+                                      return DropdownMenuItem(
+                                        value: opcion.toString(),
+                                        child: Text(opcion.toString()),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      controller.text = value ?? '';
+                                    });
+                                  },
+                                  value: controller.text.isNotEmpty
+                                      ? controller.text
+                                      : null,
+                                ),
+                              );
+                            }
+
+                            // Si es número
+                            if (tipo == 'numero') {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: TextField(
+                                  controller: controller,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    if (label == "Número de contacto")
+                                      LengthLimitingTextInputFormatter(10),
+                                  ],
+                                  decoration: InputDecoration(
+                                    labelText: label,
+                                    hintText: label == "Número de contacto"
+                                        ? "Ingresa un número de 10 dígitos"
+                                        : null,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                ),
+                              );
+                            }
+
+                            // Por defecto: texto
                             return Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: TextField(
-                                controller: entry.value,
+                                controller: controller,
+                                keyboardType: campo['multilinea'] == true
+                                    ? TextInputType.multiline
+                                    : TextInputType.text,
+                                //: TextInputType.text,
+                                maxLines: campo['multilinea'] == true
+                                    ? null
+                                    : 1,
+                                inputFormatters: [
+                                  if (campo['multilinea'] == true) ...[
+                                    LengthLimitingTextInputFormatter(
+                                      campo['maxCaracteres'] ?? 100,
+                                    ),
+                                  ],
+                                ],
                                 decoration: InputDecoration(
-                                  labelText: entry.key,
+                                  labelText: label,
                                   border: const OutlineInputBorder(),
                                 ),
                               ),
@@ -994,14 +1081,19 @@ class _UsersState extends State<Users> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            final dia = diaController.text.trim();
+                            final fecha = fechaController.text.trim();
                             final hora = horaController.text.trim();
+                            // Capturar campos propios
+                            final datosServicio = <String, String>{};
+                            camposControllers.forEach((campo, controller) {
+                              datosServicio[campo] = controller.text.trim();
+                            });
 
-                            if (dia.isEmpty || hora.isEmpty) {
+                            if (fecha.isEmpty || hora.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                    "Por favor completa fecha y hora del servicio",
+                                    "Por favor completa los campos de fecha y hora",
                                   ),
                                   backgroundColor: Colors.red,
                                 ),
@@ -1009,17 +1101,61 @@ class _UsersState extends State<Users> {
                               return;
                             }
 
-                            // Capturar extras
-                            final extras = <String, String>{};
-                            extraControllers.forEach((campo, controller) {
-                              if (controller.text.isNotEmpty) {
-                                extras[campo] = controller.text.trim();
+                            // Validacion de campos no vacios 
+                            // Verificar que todos los campos del servicio estén llenos
+                            bool camposVacios = false;
+                            camposControllers.forEach((label, controller) {
+                              if (controller.text.trim().isEmpty) {
+                                camposVacios = true;
                               }
                             });
 
+                            if (camposVacios) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Por favor completa todos los campos antes de enviar."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            
+
+                            // FILTRAR campo "Número de contacto"
+                            final numeroContacto =
+                                datosServicio["Número de contacto"];
+                            if (numeroContacto != null &&
+                                numeroContacto.isNotEmpty) {
+                              if (numeroContacto.length != 10) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "El número de contacto debe tener 10 dígitos.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                                return;
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Por favor ingresa un número de contacto.",
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
                             Navigator.of(context).pop();
 
-                            // Mostrar indicador
+                            // Mostrar indicador de progreso
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Row(
@@ -1037,16 +1173,31 @@ class _UsersState extends State<Users> {
                               ),
                             );
 
-                            // Enviar al backend
-                            await enviarCorreoServicios(
-                              toEmail: widget.correo,
-                              nombreCompleto: widget.nombreCompleto,
-                              empresa: widget.empresa,
-                              nombreServicio: nombre,
-                              dia: dia,
-                              hora: hora,
-                              extras: extras, // Campos dinámicos
-                            );
+                            try {
+                              await enviarCorreoServicios(
+                                toEmail: widget.correo,
+                                nombreCompleto: widget.nombreCompleto,
+                                empresa: widget.empresa,
+                                nombreServicio: nombre,
+                                dia: fecha,
+                                hora: hora,
+                                extras: datosServicio,
+                              );
+                            } catch (e) {
+                              // if(!mounted) return; // chequeo de seguridad
+                              ScaffoldMessenger.of(
+                                context,
+                              ).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Error al enviar la solicitud: $e",
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
                           },
                           child: const Text("Enviar solicitud"),
                         ),
@@ -1090,10 +1241,6 @@ class _UsersState extends State<Users> {
                         ),
                       ),
                       Text(
-                        "Categoría: $categoria",
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      Text(
                         "Descripción: $descripcion",
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -1112,7 +1259,6 @@ class _UsersState extends State<Users> {
       }).toList(),
     );
   }
-
   // METODOS PARA ACCESORIOS
   final List<Map<String, dynamic>> _cargarAccesorios = [
     {
@@ -1446,7 +1592,7 @@ class _UsersState extends State<Users> {
       'id': '19',
       'nombre': 'Flechas o ejes de piñon',
       'categoria': 'Accesorios',
-      'descripcion': '',
+      'descripcion': 'Eje que conecta los engranes internos del equipo para realizar el movimiento subir bajar (elemento de desgaste)',
       'imagen': 'assets/FLECHA.jpg',
       'campos': [
         {'label': 'Marca del polipasto', 'tipo': 'texto'},
@@ -1458,8 +1604,8 @@ class _UsersState extends State<Users> {
       'id': '20',
       'nombre': 'Ruedas o rodajas de trole',
       'categoria': 'Accesorios',
-      'descripcion': '',
-      'imagen': 'assets/FLECHA.jpg',
+      'descripcion': 'Elementos que permiten el traslado del trole sobre el patin de la viga',
+      'imagen': 'assets/RODAJA.jpg',
       'campos': [
         {'label': 'Marca del polipasto', 'tipo': 'texto'},
         {'label': 'No. de parte', 'tipo': 'texto'},
@@ -1747,10 +1893,10 @@ class _UsersState extends State<Users> {
   final List<Map<String, dynamic>> _cargarPatines = [
     {
       "id": "1",
-      "nombre": "Patín Hidráulico Crown",
+      "nombre": "Patín Hidráulico",
       "categoria": "Equipos de Carga",
       "descripcion": "Patín hidráulico de la marca Crown",
-      "imagen": "assets/PATIN_CROWN.jpeg",
+      "imagen": "assets/PATIN_H.png",
       "campos": [
         {"label": "Modelo", "tipo": "texto"},
         {
@@ -1779,10 +1925,37 @@ class _UsersState extends State<Users> {
     },
     {
       "id": "2",
-      "nombre": "Patín Hidráulico Toyota",
+      "nombre": "Mini Montacargas",
       "categoria": "Equipos de Carga",
       "descripcion": "Patín hidráulico de la marca Toyota",
-      "imagen": "assets/PATIN_TOYOTA.png",
+      "imagen": "assets/MINI_MONTA_MANUAL.png",
+      "campos": [
+        {"label": "Modelo", "tipo": "texto"},
+        {
+          "label": "Capacidad de carga (lb)",
+          "tipo": "selector",
+          "opciones": ["3000", "4500", "6000", "8000"],
+        },
+        {"label": "Altura mínima (mm)", "tipo": "numero"},
+        {"label": "Altura máxima (mm)", "tipo": "numero"},
+        {"label": "Longitud de horquillas (in)", "tipo": "numero"},
+        {"label": "Ancho total (in)", "tipo": "numero"},
+        {
+          "label": "Material de ruedas",
+          "tipo": "selector",
+          "opciones": ["Nylon", "Poliuretano"],
+        },
+        {"label": "Peso del equipo (kg)", "tipo": "numero"},
+        {"label": "Voltaje / sistema eléctrico", "tipo": "texto"},
+        {"label": "Garantía", "tipo": "texto"},
+      ],
+    },
+    {
+      "id": "3",
+      "nombre": "Carga Tambos",
+      "categoria": "Equipos de Carga",
+      "descripcion": "Patín hidráulico de la marca Toyota",
+      "imagen": "assets/CARGA_TAMBOS.png",
       "campos": [
         {"label": "Modelo", "tipo": "texto"},
         {
@@ -2012,7 +2185,7 @@ class _UsersState extends State<Users> {
       childAspectRatio: 0.70,
       children: _cargarPatines.map((producto) {
         final nombre = producto['nombre']!;
-        final categoria = producto['categoria']!;
+        //final categoria = producto['categoria']!;
         final descripcion = producto['descripcion']!;
         final imagenlocal = producto['imagen']!;
 
@@ -2050,10 +2223,10 @@ class _UsersState extends State<Users> {
                           fontSize: 16,
                         ),
                       ),
-                      Text(
+                      /*Text(
                         "Categoría: $categoria",
                         style: const TextStyle(fontSize: 14),
-                      ),
+                      ),*/
                       Text(
                         "Descripción: $descripcion",
                         maxLines: 3,
@@ -2374,6 +2547,25 @@ class _UsersState extends State<Users> {
                             camposControllers.forEach((campo, controller) {
                               datosCapacitacion[campo] = controller.text.trim();
                             });
+
+                            // Validacion de campos no vacios 
+                            // Verificar que todos los campos del servicio estén llenos
+                            bool camposVacios = false;
+                            camposControllers.forEach((label, controller) {
+                              if (controller.text.trim().isEmpty) {
+                                camposVacios = true;
+                              }
+                            });
+
+                            if (camposVacios) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Por favor completa todos los campos antes de enviar."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
 
                             // FILTRAR campo "Número de contacto"
                             final numeroContacto =
@@ -2996,9 +3188,9 @@ class _UsersState extends State<Users> {
     final List<Map<String, String>> tarjetas = [
       {"titulo": "Polipastos", "imagen": "assets/Polipastos_Anim.jpeg"},
       {"titulo": "Accesorios", "imagen": "assets/ACCESORIOS.png"},
-      {"titulo": "Patines Hidráulicos", "imagen": "assets/P_Patines.jpeg"},
-      {"titulo": "Capacitaciones", "imagen": "assets/PORTADA_CAP.png"},
-      {"titulo": "Servicios", "imagen": "assets/Monito_Servicios.png"},
+      {"titulo": "Patines Hidráulicos y más...", "imagen": "assets/P_Patines.jpeg"},
+      {"titulo": "Capacitaciones", "imagen": "assets/CAP_PRINCI.png"},
+      {"titulo": "Servicios", "imagen": "assets/P_SERVICIOS.png"},
       {"titulo": "Proyectos", "imagen": "assets/PROYECTOS.png"},
     ];
 
@@ -3394,7 +3586,7 @@ class _UsersState extends State<Users> {
                         mostrarProyectos = false;
                         mostrarAccesorios = true;
                       });
-                    } else if (tarjeta["titulo"] == "Patines Hidráulicos") {
+                    } else if (tarjeta["titulo"] == "Patines Hidráulicos y más...") {
                       setState(() {
                         mostrarAccesorios = false;
                         mostrarServicios = false;
