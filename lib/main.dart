@@ -121,8 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
           final int esAdmin = (raw is bool)
               ? (raw ? 1 : 0)
               : (raw is num)
-                  ? raw.toInt()
-                  : int.tryParse(raw?.toString() ?? '') ?? 0;
+              ? raw.toInt()
+              : int.tryParse(raw?.toString() ?? '') ?? 0;
 
           final nombreCompleto = '$nombres $apellidoP $apellidoM'.trim();
 
@@ -272,14 +272,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   const SizedBox(height: 10),
 
-                  Image.asset(
-                    'assets/animacion6.gif',
-                    width: 200,
-                    height: 200,
-                  ),
+                  Image.asset('assets/animacion6.gif', width: 200, height: 200),
 
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(255, 255, 255, 0.8),
@@ -338,9 +337,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF192557),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
                           onPressed: _login,
                           child: const Text(
@@ -357,17 +359,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 245, 156, 22),
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              245,
+                              156,
+                              22,
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const RegisterPage()),
+                                builder: (_) => const RegisterPage(),
+                              ),
                             );
                           },
                           child: const Text(

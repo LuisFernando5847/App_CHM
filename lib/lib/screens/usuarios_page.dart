@@ -45,8 +45,8 @@ class _UsuariosPageState extends State<UsuariosPage> {
       final nombre = '${u.nombres} ${u.apellidoP} ${u.apellidoM}'.trim();
       final campos = [
         nombre,
-        u.username ?? '',
-        u.correo ?? '',
+        u.username,
+        u.correo,
       ].join(' ').toLowerCase();
       return campos.contains(q);
     }).toList();
@@ -136,10 +136,10 @@ class _UsuariosPageState extends State<UsuariosPage> {
                           itemBuilder: (context, i) {
                             final u = list[i];
                             final nombre = '${u.nombres} ${u.apellidoP} ${u.apellidoM}'.trim();
-                            final display = (nombre.isEmpty) ? (u.username ?? '') : nombre;
+                            final display = (nombre.isEmpty) ? (u.username) : nombre;
                             return _UserItem(
                               title: display,
-                              subtitle: u.correo ?? '',
+                              subtitle: u.correo,
                               onEdit: () async {
                                 final updated = await Navigator.of(context).push<bool>(
                                   MaterialPageRoute(

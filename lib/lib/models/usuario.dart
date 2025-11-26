@@ -51,7 +51,7 @@ class Usuario {
       if (raw is List) {
         if (raw.isNotEmpty && raw.first is Map) {
           return raw
-              .map((e) => _toInt((e as Map)['id'] ?? (e as Map)['ID']))
+              .map((e) => _toInt((e as Map)['id'] ?? e['ID']))
               .where((v) => v != 0)
               .toList();
         } else {

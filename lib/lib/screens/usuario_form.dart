@@ -33,6 +33,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
   final Set<int> _selAreas = {};
 
   Usuario? _originalUser;                 
+  // ignore: unused_field
   String? _passwordOriginal;              
   static const kPrimary = Color.fromARGB(255, 29, 40, 96);
   static const kBgDark = Color.fromARGB(255, 0, 0, 0);
