@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'admin.dart';
 import 'crearcuenta.dart';
+import 'trabajadores.dart';
 import 'users.dart';
-
 import 'nuevoCliente.dart';
 
 void main() {
@@ -42,16 +43,46 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
+  bool _showPassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarCredenciales();
+  }
+
+  /// ===============================
+  /// 🔄 CARGAR CREDENCIALES GUARDADAS
+  /// ===============================
+  Future<void> _cargarCredenciales() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userController.text = prefs.getString('username') ?? '';
+      _passController.text = prefs.getString('password') ?? '';
+    });
+  }
+
+  /// ===============================
+  /// 💾 GUARDAR CREDENCIALES
+  /// ===============================
+  Future<void> _guardarCredenciales(String user, String pass) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', user);
+    await prefs.setString('password', pass);
+  }
+
+  /// ===============================
+  /// 🔐 LOGIN
+  /// ===============================
   Future<void> _login() async {
     final username = _userController.text.trim();
     final password = _passController.text.trim();
 
-    //verificar que el login no este vacio
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'No se permiten campos vacios',
+            'No se permiten campos vacíos',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
@@ -61,7 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    final backendUrl = Uri.parse('https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/Login',);
+    final backendUrl = Uri.parse(
+      'https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/Login',
+    );
 
     try {
       final response = await http.post(
@@ -70,20 +103,28 @@ class _MyHomePageState extends State<MyHomePage> {
         body: jsonEncode({"username": username, "password": password}),
       );
 
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
         if (data['success'] == true) {
-          final nombres = data['nombres'] ?? '';
-          final apellidoP = data['apellidoP'] ?? '';
-          final apellidoM = data['apellidoM'] ?? '';
-          final empresa = data['empresa'] ?? '';
-          final correo = data['correo'] ?? '';
-          final esAdmin = data['esAdmin'] ?? 0;
+          await _guardarCredenciales(username, password);
 
-          print("Valor recibido de esAdmin: $esAdmin");
+          final nombres = (data['nombres'] ?? '').toString();
+          final apellidoP = (data['apellidoP'] ?? '').toString();
+          final apellidoM = (data['apellidoM'] ?? '').toString();
+          final correo = (data['correo'] ?? '').toString();
+          final empresa = (data['empresa'] ?? '').toString();
 
-          final nombreCompleto = '$nombres $apellidoP $apellidoM';
+          final raw = data['esAdmin'];
+          final int esAdmin = (raw is bool)
+              ? (raw ? 1 : 0)
+              : (raw is num)
+                  ? raw.toInt()
+                  : int.tryParse(raw?.toString() ?? '') ?? 0;
+
+          final nombreCompleto = '$nombres $apellidoP $apellidoM'.trim();
 
           showDialog(
             context: context,
@@ -93,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
 
                     if (esAdmin == 1) {
                       Navigator.pushReplacement(
@@ -110,9 +151,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => NuevoCliente(
-                            nombreCompleto:nombreCompleto,
+                            nombreCompleto: nombreCompleto,
                             correo: correo,
                             empresa: empresa,
+                          ),
+                        ),
+                      );
+                    } else if (esAdmin == 0) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => TrabajadoresPage(
+                            userName: nombreCompleto,
+                            userEmail: correo,
                           ),
                         ),
                       );
@@ -134,16 +185,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           );
-        } else if (data['success'] == false) {
-          
-          String mensaje_error = data['error'] ?? 'Credenciales inválidas';
+        } else {
+          String msg = data['error'] ?? 'Credenciales inválidas';
 
           ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
+            SnackBar(
               content: Text(
-                mensaje_error,
+                msg,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.lightGreen,
             ),
@@ -153,91 +203,87 @@ class _MyHomePageState extends State<MyHomePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-              'Sus credenciales son invalidas',
+              'Sus credenciales son inválidas',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.lightGreen,
           ),
         );
-        _mostrarDialogo('Error', 'Estado HTTP: ${response.statusCode}');
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Sus credenciales son invalidas',
+            'Error de conexión',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.lightGreen,
+          backgroundColor: Colors.redAccent,
         ),
       );
-      _mostrarDialogo('Error', 'No se pudo conectar:\n$e');
     }
   }
 
-  void _mostrarDialogo(String titulo, String mensaje) {}
-
+  /// ===============================
+  /// 🎨 UI
+  /// ===============================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomInset: false,// NO SE MUEVE NADA SE QUEDA FIJO CUANDO ENTRA EL TECLADO
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/Fondo_Azul.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 30),
-                child: Image.asset(
-                  'assets/Logo_contorno_blanco.png',
-                  width: 100,
-                  height: 100,
-                ),
+      resizeToAvoidBottomInset: true,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/Fondo_Azul.png'),
+                fit: BoxFit.cover,
               ),
             ),
-            SingleChildScrollView(//EVITA LINEA AMARILLA
+          ),
+
+          /// LOGO
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, top: 30),
+              child: Image.asset(
+                'assets/Logo_contorno_blanco.png',
+                width: 100,
+                height: 100,
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 120),
               child: Column(
                 children: [
-                  const SizedBox(height: 90),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      'Bienvenido',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 37,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  const Text(
+                    'Bienvenido',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 37,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+
                   const SizedBox(height: 10),
-                  Image.asset('assets/animacion6.gif', width: 200, height: 200),
+
+                  Image.asset(
+                    'assets/animacion6.gif',
+                    width: 200,
+                    height: 200,
+                  ),
+
                   Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 20,
-                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(255, 255, 255, 0.7),
+                      color: const Color.fromRGBO(255, 255, 255, 0.8),
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
                     ),
                     child: Column(
                       children: [
@@ -248,43 +294,53 @@ class _MyHomePageState extends State<MyHomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+
                         const SizedBox(height: 20),
+
                         TextField(
                           controller: _userController,
                           decoration: InputDecoration(
                             labelText: 'Usuario',
-                            labelStyle: const TextStyle(color: Colors.black87),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 20),
+
                         TextField(
                           controller: _passController,
-                          obscureText: true,
+                          obscureText: !_showPassword,
                           decoration: InputDecoration(
                             labelText: 'Contraseña',
-                            labelStyle: const TextStyle(color: Colors.black87),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _showPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _showPassword = !_showPassword;
+                                });
+                              },
+                            ),
                           ),
                         ),
+
                         const SizedBox(height: 20),
+
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF192557),
-                            foregroundColor: Colors.white.withOpacity(0.9),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 50,
-                              vertical: 15,
-                            ),
+                                horizontal: 50, vertical: 15),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            shadowColor: Colors.black,
-                            elevation: 10,
+                                borderRadius: BorderRadius.circular(20)),
                           ),
                           onPressed: _login,
                           child: const Text(
@@ -296,32 +352,22 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 20),
+
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                              255,
-                              245,
-                              156,
-                              22,
-                            ),
-                            foregroundColor: Colors.white.withOpacity(0.9),
+                            backgroundColor: const Color.fromARGB(255, 245, 156, 22),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 50,
-                              vertical: 15,
-                            ),
+                                horizontal: 50, vertical: 15),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            shadowColor: Colors.black,
-                            elevation: 10,
+                                borderRadius: BorderRadius.circular(20)),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const RegisterPage(),
-                              ),
+                                  builder: (_) => const RegisterPage()),
                             );
                           },
                           child: const Text(
@@ -339,8 +385,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
