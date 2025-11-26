@@ -35,7 +35,7 @@ class _NuevoClienteState extends State<NuevoCliente> {
     required String notas,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.136:5035/api/email/solicitud-nuevocliente',
+      'http://10.7.234.136:5090/api/email/solicitud-nuevocliente',
     );
 
     final body = {
@@ -305,7 +305,7 @@ class _NuevoClienteState extends State<NuevoCliente> {
 
                 // Texto de bienvenida
                 const Text(
-                  'Bienveido',
+                  'Bienvenido',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,

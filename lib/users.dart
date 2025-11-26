@@ -43,7 +43,7 @@ class _UsersState extends State<Users> {
     Map<String, dynamic>? extras,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/solicitud-servicios',
+      'https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/email/solicitud-servicios',
     );
 
     final body = {
@@ -87,7 +87,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/solicitud-polipastos',
+      'http://10.7.234.136:5090/api/email/solicitud-polipastos',
     );
     final body = {
       'toEmail': toEmail,
@@ -127,7 +127,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario, // Campos dinámicos
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/solicitud-accesorios',
+      'https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/email/solicitud-accesorios',
     );
 
     final body = {
@@ -169,7 +169,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> datosFormulario,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/solicitud-patines',
+      'http://10.7.234.136:5090/api/email/solicitud-patines',
     );
     final respuesta = await http.post(
       url,
@@ -209,7 +209,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> adicional,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/solicitud-capacitaciones',
+      'http://10.7.234.136:5090/api/email/solicitud-capacitaciones',
     );
 
     final body = {
@@ -253,7 +253,7 @@ class _UsersState extends State<Users> {
     required Map<String, String> adicional,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/solicitud-proyecto',
+      'http://10.7.234.136:5090/api/email/solicitud-proyecto',
     );
 
     final body = {
@@ -300,7 +300,7 @@ class _UsersState extends State<Users> {
     required String notas,
   }) async {
     final url = Uri.parse(
-      'http://10.7.234.137:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
+      'http://10.7.234.136:5090/api/email/encuesta-satisfaccion', // endpoint dedicado
     );
 
     final body = {
@@ -834,7 +834,8 @@ class _UsersState extends State<Users> {
       'id': '1',
       'nombre': 'Mantenimiento Preventivo',
       'categoria': 'Servicios',
-      'descripcion': 'Revisión mecánica y eléctrica completa para reducir desgastes y/o daños mayores.',
+      'descripcion':
+          'Revisión mecánica y eléctrica completa para reducir desgastes y/o daños mayores.',
       'imagen': 'assets/Serv_MantePrev.jpeg',
       "campos": [
         {
@@ -849,7 +850,8 @@ class _UsersState extends State<Users> {
       'id': '2',
       'nombre': 'Mantenimiento Correctivo',
       'categoria': 'Servicios',
-      'descripcion': 'Correción y cambio de piezas para un correcto funcionamiento eléctrico y mecánico.',
+      'descripcion':
+          'Correción y cambio de piezas para un correcto funcionamiento eléctrico y mecánico.',
       'imagen': 'assets/Serv_Rep_E.jpeg',
       "campos": [
         {
@@ -864,7 +866,8 @@ class _UsersState extends State<Users> {
       'id': '3',
       'nombre': 'Montaje de equipo',
       'categoria': 'Servicios',
-      'descripcion': 'Colocación del equipo y correcta conexión de fases y pruebas de uso.',
+      'descripcion':
+          'Colocación del equipo y correcta conexión de fases y pruebas de uso.',
       'imagen': 'assets/Serv_Instalacion.jpeg',
       "campos": [
         {"label": "Área a trabajar", "tipo": "texto"},
@@ -1101,7 +1104,7 @@ class _UsersState extends State<Users> {
                               return;
                             }
 
-                            // Validacion de campos no vacios 
+                            // Validacion de campos no vacios
                             // Verificar que todos los campos del servicio estén llenos
                             bool camposVacios = false;
                             camposControllers.forEach((label, controller) {
@@ -1113,14 +1116,14 @@ class _UsersState extends State<Users> {
                             if (camposVacios) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Por favor completa todos los campos antes de enviar."),
+                                  content: Text(
+                                    "Por favor completa todos los campos antes de enviar.",
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
                               return;
                             }
-
-                            
 
                             // FILTRAR campo "Número de contacto"
                             final numeroContacto =
@@ -1259,6 +1262,7 @@ class _UsersState extends State<Users> {
       }).toList(),
     );
   }
+
   // METODOS PARA ACCESORIOS
   final List<Map<String, dynamic>> _cargarAccesorios = [
     {
@@ -1592,7 +1596,8 @@ class _UsersState extends State<Users> {
       'id': '19',
       'nombre': 'Flechas o ejes de piñon',
       'categoria': 'Accesorios',
-      'descripcion': 'Eje que conecta los engranes internos del equipo para realizar el movimiento subir bajar (elemento de desgaste)',
+      'descripcion':
+          'Eje que conecta los engranes internos del equipo para realizar el movimiento subir bajar (elemento de desgaste)',
       'imagen': 'assets/FLECHA.jpg',
       'campos': [
         {'label': 'Marca del polipasto', 'tipo': 'texto'},
@@ -1604,7 +1609,8 @@ class _UsersState extends State<Users> {
       'id': '20',
       'nombre': 'Ruedas o rodajas de trole',
       'categoria': 'Accesorios',
-      'descripcion': 'Elementos que permiten el traslado del trole sobre el patin de la viga',
+      'descripcion':
+          'Elementos que permiten el traslado del trole sobre el patin de la viga',
       'imagen': 'assets/RODAJA.jpg',
       'campos': [
         {'label': 'Marca del polipasto', 'tipo': 'texto'},
@@ -1807,6 +1813,7 @@ class _UsersState extends State<Users> {
                       duration: Duration(seconds: 2),
                     ),
                   );
+                  print(e);
                 }
               },
               child: const Text("Aceptar"),
@@ -2548,7 +2555,7 @@ class _UsersState extends State<Users> {
                               datosCapacitacion[campo] = controller.text.trim();
                             });
 
-                            // Validacion de campos no vacios 
+                            // Validacion de campos no vacios
                             // Verificar que todos los campos del servicio estén llenos
                             bool camposVacios = false;
                             camposControllers.forEach((label, controller) {
@@ -2560,7 +2567,9 @@ class _UsersState extends State<Users> {
                             if (camposVacios) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Por favor completa todos los campos antes de enviar."),
+                                  content: Text(
+                                    "Por favor completa todos los campos antes de enviar.",
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -2751,7 +2760,7 @@ class _UsersState extends State<Users> {
       "categoria": "Proyecto de Fabricación",
       "descripcion":
           "Diseño, fabricación y ensamble de grúa portico eléctrica conforme a especificaciones técnicas industrial.",
-      "imagen": "assets/GRUA_PORTICO_ELEC.jpg",
+      "imagen": "assets/PORTICO_ELECTRICA.png",
       "campos": [
         {"label": "Altura", "tipo": "numero"},
         {"label": "Recorrido de grúa (longitud)", "tipo": "numero"},
@@ -2906,7 +2915,8 @@ class _UsersState extends State<Users> {
 
             void limpiarCamposProyecto(String nombreProyecto) {
               if (todos_los_controladores.containsKey(nombreProyecto)) {
-                for (var controller in todos_los_controladores[nombreProyecto]!.values) {
+                for (var controller
+                    in todos_los_controladores[nombreProyecto]!.values) {
                   controller.clear();
                 }
               }
@@ -2920,7 +2930,6 @@ class _UsersState extends State<Users> {
                     // Método interno para construir el formulario dinámico
                     Widget _formularioProyecto(Map<String, dynamic> proyecto) {
                       final campos = proyecto['campos'] as List<dynamic>;
-
 
                       return Column(
                         children: [
@@ -3056,7 +3065,6 @@ class _UsersState extends State<Users> {
 
                                 // Limpia los campos del proyecto actual después de enviar
                                 limpiarCamposProyecto(proyecto['nombre']);
-                                
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -3104,7 +3112,9 @@ class _UsersState extends State<Users> {
                                 );
 
                                 // Si el proyecto NO tiene controladores aún, los crea
-                                if (!todos_los_controladores.containsKey(value)) {
+                                if (!todos_los_controladores.containsKey(
+                                  value,
+                                )) {
                                   todos_los_controladores[value!] = {
                                     for (var campo in proyectoActual!['campos'])
                                       campo['label']: TextEditingController(),
@@ -3112,10 +3122,10 @@ class _UsersState extends State<Users> {
                                 }
 
                                 // Asignamos los controladores actuales según el proyecto
-                                camposControllers = todos_los_controladores[value]!;
+                                camposControllers =
+                                    todos_los_controladores[value]!;
                               });
                             },
-
                           ),
                           const SizedBox(height: 20),
 
@@ -3188,7 +3198,10 @@ class _UsersState extends State<Users> {
     final List<Map<String, String>> tarjetas = [
       {"titulo": "Polipastos", "imagen": "assets/Polipastos_Anim.jpeg"},
       {"titulo": "Accesorios", "imagen": "assets/ACCESORIOS.png"},
-      {"titulo": "Patines Hidráulicos y más...", "imagen": "assets/P_Patines.jpeg"},
+      {
+        "titulo": "Patines Hidráulicos y más...",
+        "imagen": "assets/P_Patines.jpeg",
+      },
       {"titulo": "Capacitaciones", "imagen": "assets/CAP_PRINCI.png"},
       {"titulo": "Servicios", "imagen": "assets/P_SERVICIOS.png"},
       {"titulo": "Proyectos", "imagen": "assets/PROYECTOS.png"},
@@ -3586,7 +3599,8 @@ class _UsersState extends State<Users> {
                         mostrarProyectos = false;
                         mostrarAccesorios = true;
                       });
-                    } else if (tarjeta["titulo"] == "Patines Hidráulicos y más...") {
+                    } else if (tarjeta["titulo"] ==
+                        "Patines Hidráulicos y más...") {
                       setState(() {
                         mostrarAccesorios = false;
                         mostrarServicios = false;

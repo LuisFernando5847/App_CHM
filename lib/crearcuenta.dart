@@ -125,12 +125,14 @@ class _RegisterPageState extends State<RegisterPage> {
     String correo,
     String numeroCliente,
   ) async {
-    final url = Uri.parse('http://10.7.234.140:5090/api/email/send');
+    final url = Uri.parse('https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/Email/send');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'ToEmail': correo}),
-    );
+    );  
+    print('Código de estado: ${response.statusCode}');
+    print('Respuesta del servidor: ${response.body}');
 
     if (response.statusCode == 200) {
       // Muestra el diálogo para ingresar el código de verificación
@@ -250,7 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Verifica el código OTP con el backend
   Future<bool> _verificarOtp(String correo, String codigo) async {
-    final url = Uri.parse('http://10.7.234.140:5090/api/email/verify');
+    final url = Uri.parse('https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/email/verify');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -270,7 +272,7 @@ class _RegisterPageState extends State<RegisterPage> {
     String correo,
     String numeroCliente,
   ) async {
-    final url = Uri.parse('http://10.7.234.140:5090/api/Usuarios/registrar');
+    final url = Uri.parse('https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/Usuarios/registrar');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},

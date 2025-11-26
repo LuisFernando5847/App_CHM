@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    final backendUrl = Uri.parse('http://10.7.234.137:5090/api/Login');
+    final backendUrl = Uri.parse('https://apichm-gjabejbmdza5gefe.mexicocentral-01.azurewebsites.net/api/Login',);
 
     try {
       final response = await http.post(
@@ -74,12 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
         final data = jsonDecode(response.body);
 
         if (data['success'] == true) {
-          final nombres = data['nombres'];
-          final apellidoP = data['apellidoP'];
-          final apellidoM = data['apellidoM'];
-          final empresa = data['empresa'];
-          final correo = data['correo'];
-          final esAdmin = data['esAdmin'];
+          final nombres = data['nombres'] ?? '';
+          final apellidoP = data['apellidoP'] ?? '';
+          final apellidoM = data['apellidoM'] ?? '';
+          final empresa = data['empresa'] ?? '';
+          final correo = data['correo'] ?? '';
+          final esAdmin = data['esAdmin'] ?? 0;
 
           print("Valor recibido de esAdmin: $esAdmin");
 
